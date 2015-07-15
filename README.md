@@ -48,3 +48,5 @@ var NPMTest = React.createClass({
 AppRegistry.registerComponent('NPMTest', () => NPMTest);
 ```
 
+Library used:
+https://github.com/jharwig/PPSSignatureView
