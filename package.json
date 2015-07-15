@@ -16,6 +16,9 @@
     "ios",
     "signature"
   ],
+  "peerDependencies": {
+    "react-native": ">=0.5"
+  },
   "author": "RepairShopr",
   "license": "ISC",
   "bugs": {
