@@ -1,6 +1,6 @@
 # react-native-signature-capture
 
-<iframe src="//giphy.com/embed/3oEduIyWb48Ws3bSuc" width="480" height="285" frameBorder="0" style="max-width: 100%" class="giphy-embed" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+<img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
 
 React Native library for capturing signature
 
