@@ -1,5 +1,7 @@
 # react-native-signature-capture
 
+<iframe src="//giphy.com/embed/3oEduIyWb48Ws3bSuc" width="480" height="285" frameBorder="0" style="max-width: 100%" class="giphy-embed" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
 React Native library for capturing signature
 
 User would sign on the app and when you press the save button it returns the base64 encoded png
