@@ -38,6 +38,10 @@ var SignatureCapture = React.createClass({
     );
   },
 
+  componentWillUnmount: function() {
+    subscription.remove();
+  },
+
   render: function() {
     return (
       <View style={styles.container}>
