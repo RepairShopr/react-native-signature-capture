@@ -8,10 +8,8 @@ var {
   View
 } = React;
 
-var Component = requireNativeComponent(
-                                  'RSSignatureView',
-                                  null
-                                );
+var Component = requireNativeComponent('RSSSignatureView', null);
+
 var styles = {
   signatureBox: {
     flex: 1
