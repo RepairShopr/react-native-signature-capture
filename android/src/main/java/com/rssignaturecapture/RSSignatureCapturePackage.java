@@ -1,4 +1,4 @@
-package com.rsssignaturecapture;
+package com.rssignaturecapture;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.rsssignaturecapture.RSSSignatureCaptureViewManager;
+import com.rsssignaturecapture.RSSignatureCaptureViewManager;
 
-public class RSSSignatureCapturePackage implements ReactPackage {
+public class RSSignatureCapturePackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
     return Arrays.<NativeModule>asList();
@@ -21,7 +21,7 @@ public class RSSSignatureCapturePackage implements ReactPackage {
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
     return Arrays.<ViewManager>asList(
-      new RSSSignatureCaptureViewManager()
+      new RSSignatureCaptureViewManager()
     );
   }
 

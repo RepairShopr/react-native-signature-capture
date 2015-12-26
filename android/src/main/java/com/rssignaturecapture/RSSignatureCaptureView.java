@@ -1,4 +1,4 @@
-package com.rsssignaturecapture;
+package com.rssignaturecapture;
 
 import android.content.Context;
 
@@ -15,7 +15,7 @@ import android.graphics.RectF;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-public class RSSSignatureCaptureView extends View {
+public class RSSignatureCaptureView extends View {
 	private static final float STROKE_WIDTH = 5f;
 	private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 	
@@ -26,7 +26,7 @@ public class RSSSignatureCaptureView extends View {
 	private float lastTouchY;
 	private final RectF dirtyRect = new RectF();
 	
-	public RSSSignatureCaptureView(Context context) {
+	public RSSignatureCaptureView(Context context) {
 		
 		super(context);
 		

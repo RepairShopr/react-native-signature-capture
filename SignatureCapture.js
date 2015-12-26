@@ -8,7 +8,7 @@ var {
   View
 } = React;
 
-var Component = requireNativeComponent('RSSSignatureView', null);
+var Component = requireNativeComponent('RSSignatureView', null);
 
 var styles = {
   signatureBox: {
