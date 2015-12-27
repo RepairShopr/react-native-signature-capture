@@ -15,9 +15,13 @@ var {
 var SignatureCapture = require('react-native-signature-capture');
 
 var Example = React.createClass({
+  _onSaveEvent: function(data) {
+    console.log(data);
+  },
+
   render: function() {
     return (
-      <SignatureCapture />
+      <SignatureCapture onSaveEvent={this._onSaveEvent} />
     );
   }
 });

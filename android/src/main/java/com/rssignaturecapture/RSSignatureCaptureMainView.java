@@ -1,7 +1,14 @@
 package com.rssignaturecapture;
 
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.bridge.WritableNativeMap;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
+
+import android.util.Base64;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -116,8 +123,25 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
       signature.compress(Bitmap.CompressFormat.PNG, 90, out);
       out.flush();
       out.close();
+
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      signature.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+      byte[] byteArray = byteArrayOutputStream.toByteArray();
+      String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+      ((ThemedReactContext)this.getContext())
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit("onSaveEvent", getJSMap(file.getAbsolutePath(), encoded));
+
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
+
+  private WritableNativeMap getJSMap(String pathName, String encoded) {
+   WritableNativeMap params = new WritableNativeMap();
+   params.putString("pathName", pathName);
+   params.putString("encoded", encoded);
+   return params;
+ }
 }
