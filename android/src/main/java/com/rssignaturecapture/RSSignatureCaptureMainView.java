@@ -31,9 +31,14 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
   LinearLayout buttonsLayout;
   RSSignatureCaptureView signatureView;
 
+  Activity mActivity;
+  int mOriginalOrientation;
+
   public RSSignatureCaptureMainView(Context context, Activity activity) {
     super(context);
 
+    mOriginalOrientation = activity.getRequestedOrientation();
+    mActivity = activity;
     activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
     this.setOrientation(LinearLayout.VERTICAL);
@@ -45,6 +50,11 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     this.addView(this.buttonsLayout);
     this.addView(signatureView);
 
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    mActivity.setRequestedOrientation(mOriginalOrientation);
   }
 
   private LinearLayout buttonsLayout() {
