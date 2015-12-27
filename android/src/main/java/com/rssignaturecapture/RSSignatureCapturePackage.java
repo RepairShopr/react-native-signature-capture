@@ -10,9 +10,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.rsssignaturecapture.RSSignatureCaptureViewManager;
+import android.app.Activity;
+
+import com.rssignaturecapture.RSSignatureCaptureViewManager;
 
 public class RSSignatureCapturePackage implements ReactPackage {
+  private Activity mCurrentActivity;
+
+  public RSSignatureCapturePackage(Activity activity) {
+    mCurrentActivity = activity;
+  }
+
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
     return Arrays.<NativeModule>asList();
@@ -21,7 +29,7 @@ public class RSSignatureCapturePackage implements ReactPackage {
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
     return Arrays.<ViewManager>asList(
-      new RSSignatureCaptureViewManager()
+      new RSSignatureCaptureViewManager(mCurrentActivity)
     );
   }
 

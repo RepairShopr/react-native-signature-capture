@@ -3,14 +3,22 @@ package com.rssignaturecapture;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
 
-public class RSSignatureCaptureViewManager extends SimpleViewManager<RSSignatureCaptureView> {
+import android.app.Activity;
+
+public class RSSignatureCaptureViewManager extends SimpleViewManager<RSSignatureCaptureMainView> {
+	private Activity mCurrentActivity;
+
+	public RSSignatureCaptureViewManager(Activity activity) {
+		mCurrentActivity = activity;
+	}
+
 	@Override
 	public String getName() {
 		return "RSSignatureView";
 	}
 
 	@Override
-	public RSSignatureCaptureView createViewInstance(ThemedReactContext context) {
-		return new RSSignatureCaptureView(context);
+	public RSSignatureCaptureMainView createViewInstance(ThemedReactContext context) {
+		return new RSSignatureCaptureMainView(context, mCurrentActivity);
 	}
 }
