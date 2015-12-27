@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -117,9 +116,6 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
       signature.compress(Bitmap.CompressFormat.PNG, 90, out);
       out.flush();
       out.close();
-
-      Toast.makeText(this.getContext(), "Signature saved.", Toast.LENGTH_LONG).show();
-
     } catch (Exception e) {
       e.printStackTrace();
     }
