@@ -1,4 +1,6 @@
-# react-native-signature-capture
+# react-native-signature-capture - 
+
+##### iOS ONLY FOR THE MOMENT - see https://github.com/RepairShopr/react-native-signature-capture/issues/3 #####
 
 <img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
 
