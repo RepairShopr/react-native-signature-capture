@@ -11,7 +11,11 @@
 	CAShapeLayer *_border;
 	BOOL _loaded;
 	EAGLContext *_context;
+	UIButton *saveButton;
+	UIButton *clearButton;
 	UILabel *titleLabel;
+	BOOL _rotateClockwise;
+	BOOL _square;
 }
 
 @synthesize sign;
@@ -31,55 +35,108 @@
 	return self;
 }
 
+- (void) didRotate:(NSNotification *)notification {
+	int ori=1;
+	UIDeviceOrientation currOri = [[UIDevice currentDevice] orientation];
+	if ((currOri == UIDeviceOrientationLandscapeLeft) || (currOri == UIDeviceOrientationLandscapeRight)) {
+		ori=0;
+	}
+}
+
 - (void)layoutSubviews
 {
 	[super layoutSubviews];
 	if (!_loaded) {
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:)
+																								 name:UIDeviceOrientationDidChangeNotification object:nil];
+		
 		_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 		
 		CGSize screen = self.bounds.size;
 		
-		self.sign = [[PPSSignatureView alloc]
-																initWithFrame: CGRectMake(0, 0, screen.width, screen.height)
-																context: _context];
+		sign = [[PPSSignatureView alloc]
+						initWithFrame: CGRectMake(0, 0, screen.width, screen.height)
+						context: _context];
 		
 		[self addSubview:sign];
-		titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, sign.bounds.size.height - 80, 24)];
-		[titleLabel setCenter:CGPointMake(40, sign.bounds.size.height/2)];
-		[titleLabel setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90))];
-		[titleLabel setText:@"x_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"];
-		[titleLabel setLineBreakMode:NSLineBreakByClipping];
-		[titleLabel setTextAlignment: NSTextAlignmentLeft];
-		[titleLabel setTextColor:[UIColor colorWithRed:200/255.f green:200/255.f blue:200/255.f alpha:1.f]];
-		//[titleLabel setBackgroundColor:[UIColor greenColor]];
-		[sign addSubview:titleLabel];
-
 		
-		//Save button
-		UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		[saveButton setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90))];
-		[saveButton setLineBreakMode:NSLineBreakByClipping];
-		[saveButton addTarget:self action:@selector(onSaveButtonPressed)
-		 forControlEvents:UIControlEventTouchUpInside];
-		[saveButton setTitle:@"Save" forState:UIControlStateNormal];
-		
-		CGSize buttonSize = CGSizeMake(55, 80.0); //Width/Height is swapped
-		
-		saveButton.frame = CGRectMake(sign.bounds.size.width - buttonSize.width, sign.bounds.size.height - buttonSize.height, buttonSize.width, buttonSize.height);
-		[saveButton setBackgroundColor:[UIColor colorWithRed:250/255.f green:250/255.f blue:250/255.f alpha:1.f]];
-		[sign addSubview:saveButton];
-
-		//Clear button
-		UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		[clearButton setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90))];
-		[clearButton setLineBreakMode:NSLineBreakByClipping];
-		[clearButton addTarget:self action:@selector(onClearButtonPressed)
-				 forControlEvents:UIControlEventTouchUpInside];
-		[clearButton setTitle:@"Reset" forState:UIControlStateNormal];
-		
-		clearButton.frame = CGRectMake(sign.bounds.size.width - buttonSize.width, 0, buttonSize.width, buttonSize.height);
-		[clearButton setBackgroundColor:[UIColor colorWithRed:250/255.f green:250/255.f blue:250/255.f alpha:1.f]];
-		[sign addSubview:clearButton];
+		if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+			
+			titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 24)];
+			[titleLabel setCenter:CGPointMake(self.bounds.size.width/2, self.bounds.size.height - 120)];
+			
+			[titleLabel setText:@"x_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"];
+			[titleLabel setLineBreakMode:NSLineBreakByClipping];
+			[titleLabel setTextAlignment: NSTextAlignmentCenter];
+			[titleLabel setTextColor:[UIColor colorWithRed:200/255.f green:200/255.f blue:200/255.f alpha:1.f]];
+			//[titleLabel setBackgroundColor:[UIColor greenColor]];
+			[sign addSubview:titleLabel];
+			
+			//Save button
+			saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+			[saveButton setLineBreakMode:NSLineBreakByClipping];
+			[saveButton addTarget:self action:@selector(onSaveButtonPressed)
+					 forControlEvents:UIControlEventTouchUpInside];
+			[saveButton setTitle:@"Save" forState:UIControlStateNormal];
+			
+			CGSize buttonSize = CGSizeMake(80, 55.0);
+			
+			saveButton.frame = CGRectMake(sign.bounds.size.width - buttonSize.width,
+																		0, buttonSize.width, buttonSize.height);
+			[saveButton setBackgroundColor:[UIColor colorWithRed:250/255.f green:250/255.f blue:250/255.f alpha:1.f]];
+			[sign addSubview:saveButton];
+			
+			
+			//Clear button
+			clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+			[clearButton setLineBreakMode:NSLineBreakByClipping];
+			[clearButton addTarget:self action:@selector(onClearButtonPressed)
+						forControlEvents:UIControlEventTouchUpInside];
+			[clearButton setTitle:@"Reset" forState:UIControlStateNormal];
+			
+			clearButton.frame = CGRectMake(0, 0, buttonSize.width, buttonSize.height);
+			[clearButton setBackgroundColor:[UIColor colorWithRed:250/255.f green:250/255.f blue:250/255.f alpha:1.f]];
+			[sign addSubview:clearButton];
+		}
+		else {
+			
+			titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.height - 80, 24)];
+			[titleLabel setCenter:CGPointMake(40, self.bounds.size.height/2)];
+			[titleLabel setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90))];
+			[titleLabel setText:@"x_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"];
+			[titleLabel setLineBreakMode:NSLineBreakByClipping];
+			[titleLabel setTextAlignment: NSTextAlignmentLeft];
+			[titleLabel setTextColor:[UIColor colorWithRed:200/255.f green:200/255.f blue:200/255.f alpha:1.f]];
+			//[titleLabel setBackgroundColor:[UIColor greenColor]];
+			[sign addSubview:titleLabel];
+			
+			//Save button
+			saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+			[saveButton setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90))];
+			[saveButton setLineBreakMode:NSLineBreakByClipping];
+			[saveButton addTarget:self action:@selector(onSaveButtonPressed)
+      forControlEvents:UIControlEventTouchUpInside];
+			[saveButton setTitle:@"Save" forState:UIControlStateNormal];
+			
+			CGSize buttonSize = CGSizeMake(55, 80.0); //Width/Height is swapped
+			
+			saveButton.frame = CGRectMake(sign.bounds.size.width - buttonSize.width, sign.bounds.size.height - buttonSize.height, buttonSize.width, buttonSize.height);
+			[saveButton setBackgroundColor:[UIColor colorWithRed:250/255.f green:250/255.f blue:250/255.f alpha:1.f]];
+			[sign addSubview:saveButton];
+			
+			//Clear button
+			clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+			[clearButton setTransform:CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(90))];
+			[clearButton setLineBreakMode:NSLineBreakByClipping];
+			[clearButton addTarget:self action:@selector(onClearButtonPressed)
+						forControlEvents:UIControlEventTouchUpInside];
+			[clearButton setTitle:@"Reset" forState:UIControlStateNormal];
+			
+			clearButton.frame = CGRectMake(sign.bounds.size.width - buttonSize.width, 0, buttonSize.width, buttonSize.height);
+			[clearButton setBackgroundColor:[UIColor colorWithRed:250/255.f green:250/255.f blue:250/255.f alpha:1.f]];
+			[sign addSubview:clearButton];
+		}
 		
 	}
 	_loaded = true;
@@ -87,9 +144,23 @@
 	_border.frame = self.bounds;
 }
 
+- (void)setRotateClockwise:(BOOL)rotateClockwise {
+	_rotateClockwise = rotateClockwise;
+}
+
+- (void)setSquare:(BOOL)square {
+	_square = square;
+}
+
 -(void) onSaveButtonPressed {
-	UIImage *signImage = [self.sign signatureImage];
-  NSError *error;
+	saveButton.hidden = YES;
+	clearButton.hidden = YES;
+	UIImage *signImage = [self.sign signatureImage: _rotateClockwise withSquare:_square];
+	
+	saveButton.hidden = NO;
+	clearButton.hidden = NO;
+	
+	NSError *error;
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths firstObject];

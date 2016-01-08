@@ -3,13 +3,20 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 
-@implementation RSSignatureViewManager {
-}
+@implementation RSSignatureViewManager
 
 @synthesize bridge = _bridge;
 @synthesize signView;
 
 RCT_EXPORT_MODULE()
+
+RCT_EXPORT_VIEW_PROPERTY(rotateClockwise, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(square, BOOL)
+
+-(dispatch_queue_t) methodQueue
+{
+	return dispatch_get_main_queue();
+}
 
 -(UIView *) view
 {
@@ -18,18 +25,13 @@ RCT_EXPORT_MODULE()
 	return signView;
 }
 
-- (dispatch_queue_t)methodQueue
-{
-	return dispatch_get_main_queue();
-}
-
 -(void) saveImage:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
 	[self.bridge.eventDispatcher
 	 sendDeviceEventWithName:@"onSaveEvent"
 	 body:@{
-			@"pathName": aTempPath,
-			@"encoded": aEncoded
-			}];
+					@"pathName": aTempPath,
+					@"encoded": aEncoded
+					}];
 }
 
 @end

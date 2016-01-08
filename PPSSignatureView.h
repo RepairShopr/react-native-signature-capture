@@ -9,4 +9,8 @@
 
 - (void)erase;
 
+- (UIImage *) signatureImage;
+- (UIImage *) signatureImage: (BOOL) rotatedImage;
+- (UIImage *) signatureImage: (BOOL) rotatedImage withSquare:(BOOL)square;
+
 @end
