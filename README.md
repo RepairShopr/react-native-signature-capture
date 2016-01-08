@@ -22,8 +22,10 @@ In XCode, in the project navigator, select your project. Add the lib*.a from the
 
 Run your project (Cmd+R)
 
-If you want the signature to generate the captured signature in portait mode set the rotateClockwise property to true
-If you want the signature to reduce in size and in a square image 400x400 set suare property to true
+## Properties
+1. rotateClockwise - If you want the signature to generate the captured signature in portait mode set the rotateClockwise property to true
+
+2. square - If you want the signature to reduce in size and in a square image 400x400 set square property to true
 
 ## Examples
 
