@@ -1,4 +1,4 @@
-# react-native-signature-capture - 
+# react-native-signature-capture -
 
 ##### iOS ONLY FOR THE MOMENT - see https://github.com/RepairShopr/react-native-signature-capture/issues/3 #####
 
@@ -22,6 +22,9 @@ In XCode, in the project navigator, select your project. Add the lib*.a from the
 
 Run your project (Cmd+R)
 
+If you want the signature to generate the captured signature in portait mode set the rotateClockwise property to true
+If you want the signature to reduce in size and in a square image 400x400 set suare property to true
+
 ## Examples
 
 ```javascript
@@ -42,7 +45,10 @@ var NPMTest = React.createClass({
 
   render: function() {
     return (
-        <SignatureCapture onSaveEvent={this._onSaveEvent}/>
+        <SignatureCapture
+          rotateClockwise={true}
+          square={true}
+          onSaveEvent={this._onSaveEvent}/>
     );
   }
 });
