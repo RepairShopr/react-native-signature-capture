@@ -27,10 +27,6 @@ var styles = {
 var subscription;
 
 var SignatureCapture = React.createClass({
-  propTypes: {
-    pitchEnabled: React.PropTypes.bool
-  },
-
   componentDidMount: function() {
     subscription = DeviceEventEmitter.addListener(
         'onSaveEvent',
@@ -45,7 +41,11 @@ var SignatureCapture = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Component style={styles.signatureBox} />
+        <Component
+          style={styles.signatureBox}
+          rotateClockwise={this.props.rotateClockwise}
+          square={this.props.square}
+        />
       </View>
     )
   }
