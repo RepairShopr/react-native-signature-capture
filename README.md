@@ -82,12 +82,18 @@ AppRegistry.registerComponent('NPMTest', () => NPMTest);
 
   ![android emulator](https://www.evernote.com/shard/s24/sh/65450054-b625-4ab5-82c7-c018fb666e86/7be48b77ec3209ba/res/ecee7e2a-9fcf-4cc6-b4ab-ff6ba732e58a/skitch.png?resizeSmall&height=360 "android emulator")
 
-* **Fork and clone react-native-signature-capture** - fork and clone the repo to the node_modules/ folder
+* **Fork and clone react-native-signature-capture** - If you plan to contribute, fork and clone the repo to the node_modules/ folder
 
   ```
   $ cd node_modules/
-  $ git clone https://github.com/jedt/react-native-signature-capture
+  $ git clone https://github.com/<your github username>/react-native-signature-capture
   ```
+
+* **If you just want to install the npm just:**
+
+```
+npm install react-native-signature-capture --save
+```
 
 * Open `android/settings.gradle`
 
