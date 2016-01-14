@@ -1,6 +1,0 @@
-rootProject.name = 'Example'
-
-include ':app'
-include ':reactnativesignaturecapture'
-
-project(':reactnativesignaturecapture').projectDir = new File(settingsDir, '../node_modules/react-native-signature-capture/android')
