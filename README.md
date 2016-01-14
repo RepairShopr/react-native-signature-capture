@@ -1,6 +1,7 @@
 # react-native-signature-capture -
 
-##### iOS ONLY FOR THE MOMENT - see https://github.com/RepairShopr/react-native-signature-capture/issues/3 #####
+Android support is available (But it has problems with choppy lines)
+https://github.com/RepairShopr/react-native-signature-capture#how-to-setup-android
 
 <img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
 
