@@ -5,6 +5,7 @@ Android support is available:
 <img src="http://i.giphy.com/xT0GUKJFFkdDv25FNC.gif" />
 
 iOS:
+
 <img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
 
 React Native library for capturing signature
