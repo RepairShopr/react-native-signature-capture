@@ -1,8 +1,10 @@
 # react-native-signature-capture -
 
-Android support is available (But it has problems with choppy lines)
-https://github.com/RepairShopr/react-native-signature-capture#how-to-setup-android
+Android support is available:
 
+<img src="http://i.giphy.com/xT0GUKJFFkdDv25FNC.gif" />
+
+iOS:
 <img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
 
 React Native library for capturing signature
@@ -82,14 +84,7 @@ AppRegistry.registerComponent('NPMTest', () => NPMTest);
 
   ![android emulator](https://www.evernote.com/shard/s24/sh/65450054-b625-4ab5-82c7-c018fb666e86/7be48b77ec3209ba/res/ecee7e2a-9fcf-4cc6-b4ab-ff6ba732e58a/skitch.png?resizeSmall&height=360 "android emulator")
 
-* **Fork and clone react-native-signature-capture** - If you plan to contribute, fork and clone the repo to the node_modules/ folder
-
-  ```
-  $ cd node_modules/
-  $ git clone https://github.com/<your github username>/react-native-signature-capture
-  ```
-
-* **If you just want to install the npm just:**
+* **install the npm**
 
 ```
 npm install react-native-signature-capture --save
@@ -163,5 +158,7 @@ class signature extends Component {
 -------------
 
 Library used:
+
 https://github.com/jharwig/PPSSignatureView
 
+https://github.com/gcacace/android-signaturepad
