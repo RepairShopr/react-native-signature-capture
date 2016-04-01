@@ -27,16 +27,18 @@ Run your project (Cmd+R)
 
 ## Properties
 
+
 **saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
 
-showNativeButtons : If this props is made to true, it will display the native buttons "Save" and "Reset". 
+**showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset". 
 
-viewMode: "portrait" or "landscape" change the screen orientation based on boolean value
+**viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
 
 ## Methods 
 
 **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
 **resetSign()** : when called it will clear the image on the canvas
+
 
 
 ## Examples
@@ -230,7 +232,9 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('SignaturExample', () => SignaturExample);
+
 ```
+
 
 * Run the Android Studio project
 
