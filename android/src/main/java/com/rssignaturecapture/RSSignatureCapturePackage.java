@@ -28,9 +28,7 @@ public class RSSignatureCapturePackage implements ReactPackage {
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
-    return Arrays.<ViewManager>asList(
-      new RSSignatureCaptureViewManager(mCurrentActivity)
-    );
+    return Arrays.<ViewManager>asList(new RSSignatureCaptureViewManager(mCurrentActivity));
   }
 
   @Override

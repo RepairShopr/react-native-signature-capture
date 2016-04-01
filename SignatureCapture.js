@@ -1,52 +1,70 @@
+
 'use strict';
 
 var React = require('react-native');
-
 var {
-  requireNativeComponent,
-  DeviceEventEmitter,
-  View
+    PropTypes,
+    requireNativeComponent,
+    View,
 } = React;
 
-var Component = requireNativeComponent('RSSignatureView', null);
+var UIManager = require('UIManager');
 
-var styles = {
-  signatureBox: {
-    flex: 1
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    backgroundColor: '#F5FCFF',
-  }
+
+class SignatureCapture extends React.Component {
+
+    constructor() {
+        super();
+        this.onChange = this.onChange.bind(this);
+    }
+
+    onChange(event) {
+        console.log("Signature  ON Change Event");
+        if (!this.props.onSaveEvent) {
+            return;
+        }
+
+        this.props.onSaveEvent({
+            pathName: event.nativeEvent.pathName,
+            encoded: event.nativeEvent.encoded,
+        });
+    }
+
+    render() {
+        return (
+            <RSSignatureView {...this.props} style={{ flex: 1 }} onChange={this.onChange} />
+        );
+    }
+
+    saveImage() {
+        UIManager.dispatchViewManagerCommand(
+            React.findNodeHandle(this),
+            UIManager.RSSignatureView.Commands.saveImage,
+            [],
+        );
+    }
+
+    resetImage() {
+        UIManager.dispatchViewManagerCommand(
+            React.findNodeHandle(this),
+            UIManager.RSSignatureView.Commands.resetImage,
+            [],
+        );
+    }
+}
+
+SignatureCapture.propTypes = {
+  ...View.propTypes,
+    rotateClockwise: PropTypes.bool,
+    square: PropTypes.bool,
+    saveImageFileInExtStorage: PropTypes.bool,
+    viewMode: PropTypes.string,
+    showNativeButtons: PropTypes.bool
+
 };
 
-var subscription;
-
-var SignatureCapture = React.createClass({
-  componentDidMount: function() {
-    subscription = DeviceEventEmitter.addListener(
-        'onSaveEvent',
-        this.props.onSaveEvent
-    );
-  },
-
-  componentWillUnmount: function() {
-    subscription.remove();
-  },
-
-  render: function() {
-    return (
-      <View style={styles.container}>
-        <Component
-          style={styles.signatureBox}
-          rotateClockwise={this.props.rotateClockwise}
-          square={this.props.square}
-        />
-      </View>
-    )
-  }
+var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {
+    nativeOnly: { onChange: true }
 });
 
 module.exports = SignatureCapture;

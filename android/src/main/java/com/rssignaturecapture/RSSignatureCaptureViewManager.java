@@ -2,11 +2,32 @@ package com.rssignaturecapture;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.common.MapBuilder;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+import android.util.Log;
+
 
 import android.app.Activity;
+import java.lang.Boolean;
 
-public class RSSignatureCaptureViewManager extends SimpleViewManager<RSSignatureCaptureMainView> {
+
+public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureCaptureMainView> {
 	private Activity mCurrentActivity;
+
+	public static final String PROPS_SAVE_IMAGE_FILE="saveImageFileInExtStorage";
+	public static final String PROPS_VIEW_MODE = "viewMode";
+	public static final String PROPS_SHOW_NATIVE_BUTTONS="showNativeButtons";
+
+	public static final int COMMAND_SAVE_IMAGE = 1;
+	public static final int COMMAND_RESET_IMAGE = 2;
+
 
 	public RSSignatureCaptureViewManager(Activity activity) {
 		mCurrentActivity = activity;
@@ -17,8 +38,71 @@ public class RSSignatureCaptureViewManager extends SimpleViewManager<RSSignature
 		return "RSSignatureView";
 	}
 
+	@ReactProp(name = PROPS_SAVE_IMAGE_FILE)
+	public void setSaveImageFileInExtStorage(RSSignatureCaptureMainView view, @Nullable Boolean saveFile) {
+		Log.d("setFileInExtStorage:", "" + saveFile);
+		if(view!=null){
+			view.setSaveFileInExtStorage(saveFile);
+		}
+	}
+
+	@ReactProp(name = PROPS_VIEW_MODE)
+	public void setViewMode(RSSignatureCaptureMainView view, @Nullable String viewMode) {
+		Log.d("setViewMode:", "" + viewMode);
+		if(view!=null){
+			view.setViewMode(viewMode);
+		}
+	}
+
+
+	@ReactProp(name = PROPS_SHOW_NATIVE_BUTTONS)
+	public void setPropsShowNativeButtons(RSSignatureCaptureMainView view, @Nullable Boolean showNativeButtons) {
+		Log.d("showNativeButtons:", "" + showNativeButtons);
+		if(view!=null){
+			view.setShowNativeButtons(showNativeButtons);
+		}
+	}
+
 	@Override
 	public RSSignatureCaptureMainView createViewInstance(ThemedReactContext context) {
+		Log.d("React"," View manager createViewInstance:");
 		return new RSSignatureCaptureMainView(context, mCurrentActivity);
 	}
+
+	@Override
+	public Map<String,Integer> getCommandsMap() {
+		Log.d("React"," View manager getCommandsMap:");
+		return MapBuilder.of(
+				"saveImage",
+				COMMAND_SAVE_IMAGE,
+				"resetImage",
+				COMMAND_RESET_IMAGE);
+	}
+
+	@Override
+	public void receiveCommand(
+			RSSignatureCaptureMainView view,
+			int commandType,
+			@Nullable ReadableArray args) {
+		Assertions.assertNotNull(view);
+		Assertions.assertNotNull(args);
+		switch (commandType) {
+			case COMMAND_SAVE_IMAGE: {
+				view.saveImage();
+				return;
+			}
+			case COMMAND_RESET_IMAGE: {
+				view.reset();
+				return;
+			}
+
+			default:
+				throw new IllegalArgumentException(String.format(
+						"Unsupported command %d received by %s.",
+						commandType,
+						getClass().getSimpleName()));
+		}
+	}
+
+
 }
