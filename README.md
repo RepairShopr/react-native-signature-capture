@@ -5,7 +5,6 @@ Android support is available:
 <img src="http://i.giphy.com/xT0GUKJFFkdDv25FNC.gif" />
 
 iOS:
-
 <img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
 
 React Native library for capturing signature
@@ -27,9 +26,18 @@ In XCode, in the project navigator, select your project. Add the lib*.a from the
 Run your project (Cmd+R)
 
 ## Properties
-1. rotateClockwise - If you want the signature to generate the captured signature in portait mode set the rotateClockwise property to true
 
-2. square - If you want the signature to reduce in size and in a square image 400x400 set square property to true
+**saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
+
+showNativeButtons : If this props is made to true, it will display the native buttons "Save" and "Reset". 
+
+viewMode: "portrait" or "landscape" change the screen orientation based on boolean value
+
+## Methods 
+
+**saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
+**resetSign()** : when called it will clear the image on the canvas
+
 
 ## Examples
 
@@ -51,10 +59,11 @@ var NPMTest = React.createClass({
 
   render: function() {
     return (
-        <SignatureCapture
-          rotateClockwise={true}
-          square={true}
-          onSaveEvent={this._onSaveEvent}/>
+                  <SignatureCapture
+                    ref="sign"
+                    onSaveEvent={this._onSaveEvent}
+                    saveImageFileInExtStorage={false}
+                    showNativeButtons={false}
     );
   }
 });
@@ -138,20 +147,89 @@ public class MainActivity extends ReactActivity {
 
 * Open index.android.js
 ```
-...
-import SignatureCapture from 'react-native-signature-capture';
-...
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ */
 
-class signature extends Component {
-  render() {
-    return (
-      <SignatureCapture onSaveEvent={(data)=>{
-        console.log(data);
-      }}/>
-    );
-  }
+import React, {
+    AppRegistry,
+    Component,
+    StyleSheet,
+    Text,
+    View, TouchableHighlight
+} from 'react-native';
+
+import SignatureCapture from 'react-native-signature-capture';
+
+
+
+class SignaturExample extends Component {
+    render() {
+        return (
+            <View style={{ flex: 1, flexDirection: "column" }}>
+                <Text style={{alignItems:"center",justifyContent:"center"}}>Signature Capture Extended </Text>
+                <SignatureCapture
+                    style={[{flex:1},styles.signature]}
+                    ref="sign"
+                    onSaveEvent={this._onSaveEvent}
+                    saveImageFileInExtStorage={false}
+                    showNativeButtons={false}
+                    viewMode={"portrait"}/>
+
+                <View style={{ flex: 1, flexDirection: "row" }}>
+                    <TouchableHighlight style={styles.buttonStyle}
+                        onPress={() => { this.saveSign() } } >
+                        <Text>Save</Text>
+                    </TouchableHighlight>
+
+                    <TouchableHighlight style={styles.buttonStyle}
+                        onPress={() => { this.resetSign() } } >
+                        <Text>Reset</Text>
+                    </TouchableHighlight>
+
+                </View>
+
+            </View>
+
+
+
+        );
+    }
+
+    saveSign() {
+        this.refs["sign"].saveImage();
+    }
+
+    resetSign() {
+        this.refs["sign"].resetImage();
+    }
+
+    _onSaveEvent(result) {
+        //result.encoded - for the base64 encoded png 
+        //result.pathName - for the file path name 
+        console.log(result);
+    }
 }
-...
+
+
+
+const styles = StyleSheet.create({
+
+    signature: {
+        flex: 1,
+        borderColor: '#000033',
+        borderWidth: 1,
+    },
+    buttonStyle: {
+        flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+        backgroundColor: "#eeeeee",
+        margin: 10
+        
+    }
+});
+
+AppRegistry.registerComponent('SignaturExample', () => SignaturExample);
 ```
 
 * Run the Android Studio project
