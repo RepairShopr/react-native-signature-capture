@@ -33,6 +33,8 @@ Run your project (Cmd+R)
 
 **viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
 
+**maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
+
 ## Methods 
 
 **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
