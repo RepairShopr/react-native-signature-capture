@@ -24,6 +24,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	public static final String PROPS_SAVE_IMAGE_FILE="saveImageFileInExtStorage";
 	public static final String PROPS_VIEW_MODE = "viewMode";
 	public static final String PROPS_SHOW_NATIVE_BUTTONS="showNativeButtons";
+	public static final String PROPS_MAX_SIZE="maxSize";
 
 	public static final int COMMAND_SAVE_IMAGE = 1;
 	public static final int COMMAND_RESET_IMAGE = 2;
@@ -62,6 +63,16 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 			view.setShowNativeButtons(showNativeButtons);
 		}
 	}
+
+
+	@ReactProp(name = PROPS_MAX_SIZE)
+	public void setPropsWidth(RSSignatureCaptureMainView view, @Nullable Integer maxSize) {
+		Log.d("maxSize:",  ""+maxSize);
+		if(view!=null){
+			view.setMaxSize(maxSize);
+		}
+	}
+
 
 	@Override
 	public RSSignatureCaptureMainView createViewInstance(ThemedReactContext context) {

@@ -59,8 +59,8 @@ SignatureCapture.propTypes = {
     square: PropTypes.bool,
     saveImageFileInExtStorage: PropTypes.bool,
     viewMode: PropTypes.string,
-    showNativeButtons: PropTypes.bool
-
+    showNativeButtons: PropTypes.bool,
+    maxSize:PropTypes.number
 };
 
 var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {
