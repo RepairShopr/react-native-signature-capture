@@ -33,7 +33,7 @@ Run your project (Cmd+R)
 
 **viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
 
-**maxSize**  : sets the max size of the image maintains aspect ratio, default is  500
+**maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
 ## Methods 
 
