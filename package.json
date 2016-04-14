@@ -1,80 +1,28 @@
 {
-  "_args": [
-    [
-      "react-native-signature-capture",
-      "/Users/john.francis/Projects/fquick-hero-app/hero_app_rn"
-    ]
-  ],
-  "_from": "react-native-signature-capture@latest",
-  "_id": "react-native-signature-capture@0.4.0",
-  "_inCache": true,
-  "_installable": true,
-  "_location": "/react-native-signature-capture",
-  "_nodeVersion": "5.0.0",
-  "_npmUser": {
-    "email": "jed.tiotuico@icloud.com",
-    "name": "jedt"
-  },
-  "_npmVersion": "3.5.0",
-  "_phantomChildren": {},
-  "_requested": {
-    "name": "react-native-signature-capture",
-    "raw": "react-native-signature-capture",
-    "rawSpec": "",
-    "scope": null,
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/react-native-signature-capture/-/react-native-signature-capture-0.4.0.tgz",
-  "_shasum": "b2b85e89f5c7c1497e4d0e4d5a0073727b19e13f",
-  "_shrinkwrap": null,
-  "_spec": "react-native-signature-capture",
-  "_where": "/Users/john.francis/Projects/fquick-hero-app/hero_app_rn",
-  "author": {
-    "name": "RepairShopr"
-  },
-  "bugs": {
-    "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
-  },
-  "dependencies": {},
-  "description": "Lets users sign their signatures",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "b2b85e89f5c7c1497e4d0e4d5a0073727b19e13f",
-    "tarball": "http://registry.npmjs.org/react-native-signature-capture/-/react-native-signature-capture-0.4.0.tgz"
-  },
-  "gitHead": "9d638bbbefb14e35d0d7241fd1880b3553046229",
-  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
-  "keywords": [
-    "ios",
-    "react-component",
-    "react-native",
-    "signature"
-  ],
-  "license": "ISC",
-  "main": "SignatureCapture.js",
-  "maintainers": [
-    {
-      "name": "jedt",
-      "email": "jed.tiotuico@icloud.com"
-    }
-  ],
   "name": "react-native-signature-capture",
-  "optionalDependencies": {},
-  "peerDependencies": {
-    "react-native": ">=0.17"
+  "version": "0.4.0",
+  "description": "Lets users sign their signatures",
+  "main": "SignatureCapture.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RepairShopr/react-native-signature-capture.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "keywords": [
+    "react-component",
+    "react-native",
+    "ios",
+    "signature"
+  ],
+  "peerDependencies": {
+    "react-native": ">=0.17"
   },
-  "version": "0.4.0"
+  "author": "RepairShopr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
+  },
+  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme"
 }
