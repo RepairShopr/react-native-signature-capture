@@ -29,7 +29,7 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import java.lang.Boolean;
 
-public class RSSignatureCaptureMainView extends LinearLayout implements OnClickListener {
+public class RSSignatureCaptureMainView extends LinearLayout implements OnClickListener,RSSignatureCaptureView.SignatureCallback {
   LinearLayout buttonsLayout;
   RSSignatureCaptureView signatureView;
 
@@ -47,7 +47,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     mActivity = activity;
 
     this.setOrientation(LinearLayout.VERTICAL);
-    this.signatureView = new RSSignatureCaptureView(context);
+    this.signatureView = new RSSignatureCaptureView(context,this);
     // add the buttons and signature views
     this.buttonsLayout = this.buttonsLayout();
     this.addView(this.buttonsLayout);
@@ -204,5 +204,13 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     if (this.signatureView != null) {
       this.signatureView.clearSignature();
     }
+  }
+
+  @Override public void onDragged() {
+    WritableMap event = Arguments.createMap();
+    event.putBoolean("dragged", true);
+    ReactContext reactContext = (ReactContext) getContext();
+    reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "topChange", event);
+
   }
 }
