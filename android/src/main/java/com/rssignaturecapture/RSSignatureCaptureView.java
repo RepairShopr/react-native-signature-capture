@@ -106,6 +106,7 @@ public class RSSignatureCaptureView extends View {
 		return signatureBitmap;
 	}
 
+
 	/**
 	* clear signature canvas
 	*/
@@ -333,6 +334,7 @@ public class RSSignatureCaptureView extends View {
 	}
 
 	public void clear() {
+		dragged = false;
 		mPoints = new ArrayList<TimedPoint>();
 		mLastVelocity = 0;
 		mLastWidth = (mMinWidth + mMaxWidth) / 2;
