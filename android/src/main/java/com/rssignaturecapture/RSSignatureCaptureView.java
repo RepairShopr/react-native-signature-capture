@@ -49,10 +49,18 @@ public class RSSignatureCaptureView extends View {
 
 	private float mVelocityFilterWeight;
 	private Canvas mSignatureBitmapCanvas = null;
+	private SignatureCallback callback;
+	private boolean dragged = false;
+	private int SCROLL_THRESHOLD = 50;
 
-	public RSSignatureCaptureView(Context context) {
+	public interface SignatureCallback {
+		void onDragged();
+	}
+
+	public RSSignatureCaptureView(Context context, SignatureCallback callback) {
 
 		super(context);
+		this.callback = callback;
 
 		//Fixed parameters
 		mPaint.setAntiAlias(true);
@@ -97,6 +105,7 @@ public class RSSignatureCaptureView extends View {
 
 		return signatureBitmap;
 	}
+
 
 	/**
 	* clear signature canvas
@@ -235,6 +244,9 @@ public class RSSignatureCaptureView extends View {
 			case MotionEvent.ACTION_MOVE:
 				resetDirtyRect(eventX, eventY);
 				addPoint(new TimedPoint(eventX, eventY));
+				if((Math.abs(mLastTouchX - eventX) > SCROLL_THRESHOLD || Math.abs(mLastTouchY - eventY) > SCROLL_THRESHOLD)){
+					dragged = true;
+				}
 				break;
 
 			case MotionEvent.ACTION_UP:
@@ -242,6 +254,7 @@ public class RSSignatureCaptureView extends View {
 				addPoint(new TimedPoint(eventX, eventY));
 				getParent().requestDisallowInterceptTouchEvent(true);
 				setIsEmpty(false);
+				sendDragEventToReact();
 				break;
 
 			default:
@@ -256,6 +269,12 @@ public class RSSignatureCaptureView extends View {
 				(int) (mDirtyRect.bottom + mMaxWidth));
 
 		return true;
+	}
+
+	public void sendDragEventToReact() {
+		if (callback != null && dragged) {
+			callback.onDragged();
+		}
 	}
 
 	// all touch events during the drawing
@@ -315,6 +334,7 @@ public class RSSignatureCaptureView extends View {
 	}
 
 	public void clear() {
+		dragged = false;
 		mPoints = new ArrayList<TimedPoint>();
 		mLastVelocity = 0;
 		mLastWidth = (mMinWidth + mMaxWidth) / 2;

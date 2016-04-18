@@ -40,6 +40,10 @@ Run your project (Cmd+R)
 **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
 **resetSign()** : when called it will clear the image on the canvas
 
+## Callback Props
+**onSaveEvent** : Triggered when saveImage() is called, which return Base64 Encoded String and image file path.
+**onDragEvent** : Triggered when user marks his signature on the canvas. This will not be called when the user does not perform any action on canvas.
+
 
 
 ## Examples
@@ -65,6 +69,7 @@ var NPMTest = React.createClass({
                   <SignatureCapture
                     ref="sign"
                     onSaveEvent={this._onSaveEvent}
+                    onDragEvent={this._onDragEvent}
                     saveImageFileInExtStorage={false}
                     showNativeButtons={false}
     );
@@ -176,6 +181,7 @@ class SignaturExample extends Component {
                     style={[{flex:1},styles.signature]}
                     ref="sign"
                     onSaveEvent={this._onSaveEvent}
+                    onDragEvent={this._onDragEvent}
                     saveImageFileInExtStorage={false}
                     showNativeButtons={false}
                     viewMode={"portrait"}/>
@@ -212,6 +218,10 @@ class SignaturExample extends Component {
         //result.encoded - for the base64 encoded png 
         //result.pathName - for the file path name 
         console.log(result);
+    }
+    _onDragEvent() {
+         // This callback will be called when the user enters signature
+        console.log("dragged");
     }
 }
 

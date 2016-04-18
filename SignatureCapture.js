@@ -20,15 +20,28 @@ class SignatureCapture extends React.Component {
 
     onChange(event) {
         console.log("Signature  ON Change Event");
-        if (!this.props.onSaveEvent) {
+        
+        
+       if(event.nativeEvent.pathName){
+           
+           if (!this.props.onSaveEvent) {
             return;
         }
-
         this.props.onSaveEvent({
             pathName: event.nativeEvent.pathName,
             encoded: event.nativeEvent.encoded,
         });
-    }
+       }
+       
+       if(event.nativeEvent.dragged){
+           if (!this.props.onDragEvent) {
+            return;
+        }
+        this.props.onDragEvent({
+            dragged: event.nativeEvent.dragged
+        });
+       }
+       }
 
     render() {
         return (
