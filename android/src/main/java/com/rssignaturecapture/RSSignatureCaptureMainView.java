@@ -1,8 +1,14 @@
 package com.rssignaturecapture;
 
+import android.util.Log;
+import android.view.ViewGroup;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.bridge.WritableNativeMap;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,13 +18,8 @@ import android.util.Base64;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Environment;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import android.widget.LinearLayout;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import java.lang.Boolean;
 
 public class RSSignatureCaptureMainView extends LinearLayout implements OnClickListener {
   LinearLayout buttonsLayout;
@@ -33,29 +35,56 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
 
   Activity mActivity;
   int mOriginalOrientation;
+  Boolean saveFileInExtStorage = false;
+  String viewMode = "portrait";
+  Boolean showNativeButtons = true;
+  int maxSize = 500;
 
   public RSSignatureCaptureMainView(Context context, Activity activity) {
     super(context);
-
+    Log.d("React:", "RSSignatureCaptureMainView(Contructtor)");
     mOriginalOrientation = activity.getRequestedOrientation();
     mActivity = activity;
-    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
     this.setOrientation(LinearLayout.VERTICAL);
-
-    this.buttonsLayout = this.buttonsLayout();
     this.signatureView = new RSSignatureCaptureView(context);
-
     // add the buttons and signature views
+    this.buttonsLayout = this.buttonsLayout();
     this.addView(this.buttonsLayout);
     this.addView(signatureView);
 
+    setLayoutParams(new android.view.ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
-  @Override
-  protected void onDetachedFromWindow() {
-    mActivity.setRequestedOrientation(mOriginalOrientation);
+  public void setSaveFileInExtStorage(Boolean saveFileInExtStorage) {
+    this.saveFileInExtStorage = saveFileInExtStorage;
   }
+
+  public void setViewMode(String viewMode) {
+    this.viewMode = viewMode;
+
+    if (viewMode.equalsIgnoreCase("portrait")) {
+      mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    } else if (viewMode.equalsIgnoreCase("landscape")) {
+      mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+  }
+
+  public void setShowNativeButtons(Boolean showNativeButtons) {
+    this.showNativeButtons = showNativeButtons;
+    if (showNativeButtons) {
+      Log.d("Added Native Buttons", "Native Buttons:" + showNativeButtons);
+      buttonsLayout.setVisibility(View.VISIBLE);
+    } else {
+      buttonsLayout.setVisibility(View.GONE);
+    }
+  }
+
+  public void setMaxSize(int size) {
+    this.maxSize = size;
+  }
+
 
   private LinearLayout buttonsLayout() {
 
@@ -85,27 +114,24 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
   }
 
   // the on click listener of 'save' and 'clear' buttons
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     String tag = v.getTag().toString().trim();
 
     // save the signature
     if (tag.equalsIgnoreCase("save")) {
-      this.saveImage(this.signatureView.getSignature());
+      this.saveImage();
     }
 
     // empty the canvas
-    else {
+    else if (tag.equalsIgnoreCase("Reset")) {
       this.signatureView.clearSignature();
     }
-
   }
 
   /**
-  * save the signature to an sd card directory
-  * @param signature bitmap
-  */
-  final void saveImage(Bitmap signature) {
+   * save the signature to an sd card directory
+   */
+  final void saveImage() {
 
     String root = Environment.getExternalStorageDirectory().toString();
 
@@ -128,30 +154,55 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
 
     try {
 
+      Log.d("React Signature", "Save file-======:" + saveFileInExtStorage);
       // save the signature
-      FileOutputStream out = new FileOutputStream(file);
-      signature.compress(Bitmap.CompressFormat.PNG, 90, out);
-      out.flush();
-      out.close();
+      if (saveFileInExtStorage) {
+        FileOutputStream out = new FileOutputStream(file);
+        this.signatureView.getSignature().compress(Bitmap.CompressFormat.PNG, 90, out);
+        out.flush();
+        out.close();
+      }
+
 
       ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      signature.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+      Bitmap resizedBitmap = getResizedBitmap(this.signatureView.getSignature());
+      resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+
+
       byte[] byteArray = byteArrayOutputStream.toByteArray();
       String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-      ((ThemedReactContext)this.getContext())
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .emit("onSaveEvent", getJSMap(file.getAbsolutePath(), encoded));
-
+      WritableMap event = Arguments.createMap();
+      event.putString("pathName", file.getAbsolutePath());
+      event.putString("encoded", encoded);
+      ReactContext reactContext = (ReactContext) getContext();
+      reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "topChange", event);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  private WritableNativeMap getJSMap(String pathName, String encoded) {
-   WritableNativeMap params = new WritableNativeMap();
-   params.putString("pathName", pathName);
-   params.putString("encoded", encoded);
-   return params;
- }
+  public Bitmap getResizedBitmap(Bitmap image) {
+    Log.d("React Signature","maxSize:"+maxSize);
+    int width = image.getWidth();
+    int height = image.getHeight();
+
+    float bitmapRatio = (float) width / (float) height;
+    if (bitmapRatio > 1) {
+      width = maxSize;
+      height = (int) (width / bitmapRatio);
+    } else {
+      height = maxSize;
+      width = (int) (height * bitmapRatio);
+    }
+
+    return Bitmap.createScaledBitmap(image, width, height, true);
+  }
+
+
+  public void reset() {
+    if (this.signatureView != null) {
+      this.signatureView.clearSignature();
+    }
+  }
 }
