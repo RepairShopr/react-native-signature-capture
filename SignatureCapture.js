@@ -6,10 +6,8 @@ var {
     PropTypes,
     requireNativeComponent,
     View,
+    UIManager
 } = React;
-
-var UIManager = require('UIManager');
-
 
 class SignatureCapture extends React.Component {
 
