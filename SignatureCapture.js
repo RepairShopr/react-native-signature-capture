@@ -1,13 +1,17 @@
 
 'use strict';
 
-var React = require('react-native');
+var ReactNative = require('react-native');
+var React = require('react');
 var {
-    PropTypes,
+    PropTypes
+} = React;
+var {
     requireNativeComponent,
     View,
-    UIManager
-} = React;
+    UIManager,
+    DeviceEventEmitter
+} = ReactNative;
 
 class SignatureCapture extends React.Component {
 
@@ -17,29 +21,41 @@ class SignatureCapture extends React.Component {
     }
 
     onChange(event) {
-        console.log("Signature  ON Change Event");
-        
-        
-       if(event.nativeEvent.pathName){
-           
-           if (!this.props.onSaveEvent) {
-            return;
+
+        if(event.nativeEvent.pathName){
+
+            if (!this.props.onSaveEvent) {
+                return;
+            }
+            this.props.onSaveEvent({
+                pathName: event.nativeEvent.pathName,
+                encoded: event.nativeEvent.encoded,
+            });
         }
-        this.props.onSaveEvent({
-            pathName: event.nativeEvent.pathName,
-            encoded: event.nativeEvent.encoded,
-        });
-       }
-       
-       if(event.nativeEvent.dragged){
-           if (!this.props.onDragEvent) {
-            return;
+
+        if(event.nativeEvent.dragged){
+            if (!this.props.onDragEvent) {
+                return;
+            }
+            this.props.onDragEvent({
+                dragged: event.nativeEvent.dragged
+            });
         }
-        this.props.onDragEvent({
-            dragged: event.nativeEvent.dragged
-        });
-       }
-       }
+    }
+
+    componentDidMount() {
+        this.subscription = DeviceEventEmitter.addListener(
+            'onSaveEvent',
+            this.props.onSaveEvent
+        );
+    }
+
+    componentWillUnmount() {
+        if (this.subscription) {
+            this.subscription.remove()
+            this.subscription = null;
+        }
+    }
 
     render() {
         return (
