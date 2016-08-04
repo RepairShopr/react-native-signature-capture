@@ -1,23 +1,19 @@
 package com.rssignaturecapture;
 
-import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.SimpleViewManager;
-import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.bridge.ReactMethod;
+import android.util.Log;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.rssignaturecapture.RSSignatureCaptureContextModule;
+
 import java.util.Map;
 
 import javax.annotation.Nullable;
-import android.util.Log;
-
-
-import java.lang.Boolean;
-
 
 public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureCaptureMainView> {
 
