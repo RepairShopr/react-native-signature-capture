@@ -51,13 +51,16 @@ Run your project (Cmd+R)
 ```javascript
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var SignatureCapture = require('react-native-signature-capture');
+
 var {
   AppRegistry,
-} = React;
+  View,
+} = ReactNative;
 
-var NPMTest = React.createClass({
+var RNSignatureExample = React.createClass({
   _onSaveEvent: function(result) {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
@@ -66,17 +69,18 @@ var NPMTest = React.createClass({
 
   render: function() {
     return (
-                  <SignatureCapture
-                    ref="sign"
-                    onSaveEvent={this._onSaveEvent}
-                    onDragEvent={this._onDragEvent}
-                    saveImageFileInExtStorage={false}
-                    showNativeButtons={false}
+      <SignatureCapture
+        ref="sign"
+        onSaveEvent={this._onSaveEvent}
+        onDragEvent={this._onDragEvent}
+        saveImageFileInExtStorage={false}
+        showNativeButtons={false}
+      />
     );
   }
 });
 
-AppRegistry.registerComponent('NPMTest', () => NPMTest);
+AppRegistry.registerComponent('RNSignatureExample', () => RNSignatureExample);
 ```
 ##How to Setup Android
 
@@ -249,3 +253,8 @@ Library used:
 https://github.com/jharwig/PPSSignatureView
 
 https://github.com/gcacace/android-signaturepad
+
+
+How to contribute
+-----------------
+Submit a PR - also please don't be shy and email me. Lastly, I love to see how this project is doing in the wild! please email me screenshot of your app - jed.tiotuico@gmail.com (I will disclose the info, I will not tell anyone about it, I will not blog nor tweet it)
