@@ -29,13 +29,13 @@ Run your project (Cmd+R)
 
 **saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
 
-**showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset". 
+**showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset".
 
 **viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
 
 **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
-## Methods 
+## Methods
 
 **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
 **resetSign()** : when called it will clear the image on the canvas
@@ -79,7 +79,6 @@ var NPMTest = React.createClass({
 AppRegistry.registerComponent('NPMTest', () => NPMTest);
 ```
 ##How to Setup Android
-*Note: I used React Native 0.18.0-rc*
 
 * **Create a project folder**
 
@@ -95,12 +94,7 @@ AppRegistry.registerComponent('NPMTest', () => NPMTest);
 
   c. Select the android/ folder on the signature/ project folder
 
-
-  ![android project](https://www.evernote.com/shard/s24/sh/bf2c3fe0-45ed-48d5-8233-2bde0404fd5a/7592e2dff6c91cda/res/a68334d1-b527-451a-92a5-13188a91a768/skitch.png?resizeSmall&width=416)
-
   d. Run android project (assuming android emulator is already open)
-
-  ![android emulator](https://www.evernote.com/shard/s24/sh/65450054-b625-4ab5-82c7-c018fb666e86/7be48b77ec3209ba/res/ecee7e2a-9fcf-4cc6-b4ab-ff6ba732e58a/skitch.png?resizeSmall&height=360 "android emulator")
 
 * **install the npm**
 
@@ -109,8 +103,6 @@ npm install react-native-signature-capture --save
 ```
 
 * Open `android/settings.gradle`
-
-  ![settings.gradle](https://www.evernote.com/shard/s24/sh/13f5e3d8-4230-45f3-a4c7-934ddeb1df7e/bf0aa53a2a1a0d51/res/bed923df-35e4-4076-9c44-3b097c16209f/skitch.png?resizeSmall&width=280)
 
 * Add reactnativesignaturecapture like below:
 
@@ -121,7 +113,6 @@ npm install react-native-signature-capture --save
 
 * Open `android/app/build.gradle`
 
-  ![build.gradle](https://www.evernote.com/shard/s24/sh/c1a3437b-9e9f-472e-a640-13b9194804a9/f5579c89c8856afd/res/a451f235-b901-483d-a759-c739becd5190/skitch.png?resizeSmall&width=280)
 ```
 ...
 dependencies {
@@ -130,9 +121,7 @@ dependencies {
 }
 ```
 
-* Open MainActivity.java
-
-  ![MainActivity.java](https://www.evernote.com/shard/s24/sh/c023412e-c79d-46e5-9119-87453180003c/c1ab69a99604fd80/res/7cc76cee-f669-4d06-bed8-9a57e4edc586/skitch.png?resizeSmall&width=280)
+* Open MainApplication.java
 
 ```
 import com.rssignaturecapture.RSSignatureCapturePackage;  // <--- import
@@ -147,7 +136,7 @@ public class MainActivity extends ReactActivity {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-        new RSSignatureCapturePackage(this), // <------ add here
+        new RSSignatureCapturePackage(), // <------ add here
         new MainReactPackage());
     }
 }
@@ -160,19 +149,23 @@ public class MainActivity extends ReactActivity {
  * https://github.com/facebook/react-native
  */
 
-import React, {
+var React = require('react');
+var ReactNative = require('react-native');
+
+var {Component} = React;
+
+var {
     AppRegistry,
-    Component,
     StyleSheet,
     Text,
     View, TouchableHighlight
-} from 'react-native';
+} = ReactNative;
 
 import SignatureCapture from 'react-native-signature-capture';
 
 
 
-class SignaturExample extends Component {
+class RNSignatureExample extends Component {
     render() {
         return (
             <View style={{ flex: 1, flexDirection: "column" }}>
@@ -215,8 +208,8 @@ class SignaturExample extends Component {
     }
 
     _onSaveEvent(result) {
-        //result.encoded - for the base64 encoded png 
-        //result.pathName - for the file path name 
+        //result.encoded - for the base64 encoded png
+        //result.pathName - for the file path name
         console.log(result);
     }
     _onDragEvent() {
@@ -238,11 +231,11 @@ const styles = StyleSheet.create({
         flex: 1, justifyContent: "center", alignItems: "center", height: 50,
         backgroundColor: "#eeeeee",
         margin: 10
-        
+
     }
 });
 
-AppRegistry.registerComponent('SignaturExample', () => SignaturExample);
+AppRegistry.registerComponent('RNSignatureExample', () => RNSignatureExample);
 
 ```
 
