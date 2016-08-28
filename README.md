@@ -1,153 +1,131 @@
-# react-native-signature-capture -
+# react-native-signature-capture
 
-Android support is available:
-
-<img src="http://i.giphy.com/xT0GUKJFFkdDv25FNC.gif" />
-
-iOS:
-<img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
-
+## About this
 React Native library for capturing signature
 
 User would sign on the app and when you press the save button it returns the base64 encoded png
 
-## Usage
+### iOS
+<img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
+
+### Android
+<img src="http://i.giphy.com/xT0GUKJFFkdDv25FNC.gif" />
+
+## Install
 
 First you need to install react-native-signature-capture:
 
-```javascript
+```sh
 npm install react-native-signature-capture --save
 ```
 
-In XCode, in the project navigator, right click Libraries ➜ Add Files to [your project's name] Go to node_modules ➜ react-native-signature-capture and add the .xcodeproj file
+Second you need to link react-native-signature-capture:
 
-In XCode, in the project navigator, select your project. Add the lib*.a from the signature-capture project to your project's Build Phases ➜ Link Binary With Libraries Click .xcodeproj file you added before in the project navigator and go the Build Settings tab. Make sure 'All' is toggled on (instead of 'Basic'). Look for Header Search Paths and make sure it contains both $(SRCROOT)/../react-native/React and $(SRCROOT)/../../React - mark both as recursive.
-
-Run your project (Cmd+R)
-
-## Properties
-
-**saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
-
-**showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset".
-
-**viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
-
-**maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
-
-## Methods
-
-**saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
-**resetSign()** : when called it will clear the image on the canvas
-
-## Callback Props
-**onSaveEvent** : Triggered when saveImage() is called, which return Base64 Encoded String and image file path.
-**onDragEvent** : Triggered when user marks his signature on the canvas. This will not be called when the user does not perform any action on canvas.
-
-
-
-## Examples
-
-```javascript
-'use strict';
-
-var React = require('react');
-var ReactNative = require('react-native');
-var SignatureCapture = require('react-native-signature-capture');
-
-var {
-  AppRegistry,
-  View,
-} = ReactNative;
-
-var RNSignatureExample = React.createClass({
-  _onSaveEvent: function(result) {
-    //result.encoded - for the base64 encoded png
-    //result.pathName - for the file path name
-    console.log(result);
-  },
-
-  render: function() {
-    return (
-      <SignatureCapture
-        ref="sign"
-        onSaveEvent={this._onSaveEvent}
-        onDragEvent={this._onDragEvent}
-        saveImageFileInExtStorage={false}
-        showNativeButtons={false}
-      />
-    );
-  }
-});
-
-AppRegistry.registerComponent('RNSignatureExample', () => RNSignatureExample);
-```
-##How to Setup Android
-
-* **Create a project folder**
-
-   `$ react-native init signature`
-* **Run the Packager** - create a separate terminal tab and run the packager in the background
-
-    `$ npm start`
-* **Try to run the react native app on android** - Make sure that your Android studio can run the react native project
-
-  a. Open Android Studio
-
-  b. Click 'Open Existing Android Studio Project'
-
-  c. Select the android/ folder on the signature/ project folder
-
-  d. Run android project (assuming android emulator is already open)
-
-* **install the npm**
-
-```
-npm install react-native-signature-capture --save
+```sh
+react-native link react-native-signature-capture
 ```
 
-* Open `android/settings.gradle`
+Use above `react-native link` command to automatically complete the installation, or link manually like so:
 
-* Add reactnativesignaturecapture like below:
+### iOS
 
-```
-  include ':reactnativesignaturecapture',':app'
-  project(':reactnativesignaturecapture').projectDir = new File(settingsDir, '../node_modules/react-native-signature-capture/android')
-```
+1. In the XCode's "Project navigator", right click on your project's Libraries folder ➜ Add Files to <...>
+2. Go to node_modules ➜ react-native-signature-capture ➜ ios ➜ select RSSignatureCapture.xcodeproj
+3. Add libRSSignatureCapture.a to Build Phases -> Link Binary With Libraries
+4. Compile and have fun
 
-* Open `android/app/build.gradle`
+### Android
+
+Add these lines in your file: android/settings.gradle
 
 ```
 ...
+
+include ':reactnativesignaturecapture',':app'
+project(':reactnativesignaturecapture').projectDir = new File(settingsDir, '../node_modules/react-native-signature-capture/android')
+```
+
+Add line in your file: android/app/build.gradle
+
+```
+...
+
 dependencies {
     ...
-    compile project(':reactnativesignaturecapture')
+    compile project(':reactnativesignaturecapture') // <-- add this line
 }
 ```
 
-* Open MainApplication.java
+Add import and line in your file: android/app/src/main/java/<...>/MainApplication.java
 
-```
-import com.rssignaturecapture.RSSignatureCapturePackage;  // <--- import
+```java
+...
 
-public class MainActivity extends ReactActivity {
-  ......
+import com.rssignaturecapture.RSSignatureCapturePackage; // <-- add this import
 
-  /**
-   * A list of packages used by the app. If the app uses additional views
-   * or modules besides the default ones, add more packages here.
-   */
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-        new RSSignatureCapturePackage(), // <------ add here
-        new MainReactPackage());
-    }
+public class MainApplication extends Application implements ReactApplication {
+
+    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                new RSSignatureCapturePackage() // <-- add this line
+            );
+        }
+  }
+
+...
 }
 ```
 
-* Open index.android.js
+## Usage
+
+Then you can use SignatureCapture component in your react-native's App, like this:
+```javascript
+...
+import React, {Component} from 'react';
+import SignatureCapture from 'react-native-signature-capture';
+
+class CustomComponent extends Component {
+
+  ...
+  render() {
+    return (
+      <SignatureCapture
+        {...someProps}
+      />
+    );
+  }
+}
 ```
+
+### Properties
+
++ **saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
+
++ **showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset".
+
++ **viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
+
++ **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
+
+### Methods
+
++ **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
+
++ **resetSign()** : when called it will clear the image on the canvas
+
+### Callback Props
++ **onSaveEvent** : Triggered when saveImage() is called, which return Base64 Encoded String and image file path.
+
++ **onDragEvent** : Triggered when user marks his signature on the canvas. This will not be called when the user does not perform any action on canvas.
+
+
+### Example
+
+```javascript
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -166,8 +144,6 @@ var {
 } = ReactNative;
 
 import SignatureCapture from 'react-native-signature-capture';
-
-
 
 class RNSignatureExample extends Component {
     render() {
@@ -197,9 +173,6 @@ class RNSignatureExample extends Component {
                 </View>
 
             </View>
-
-
-
         );
     }
 
@@ -222,10 +195,7 @@ class RNSignatureExample extends Component {
     }
 }
 
-
-
 const styles = StyleSheet.create({
-
     signature: {
         flex: 1,
         borderColor: '#000033',
@@ -235,16 +205,11 @@ const styles = StyleSheet.create({
         flex: 1, justifyContent: "center", alignItems: "center", height: 50,
         backgroundColor: "#eeeeee",
         margin: 10
-
     }
 });
 
 AppRegistry.registerComponent('RNSignatureExample', () => RNSignatureExample);
-
 ```
-
-
-* Run the Android Studio project
 
 -------------
 
