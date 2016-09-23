@@ -1,0 +1,53 @@
+{
+    "env": {
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "parser": "babel-eslint",
+    "plugins": [
+        "react",
+        "react-native"
+    ],
+    "globals": {
+      "process": true,
+      "console": true,
+      "fetch": true,
+      "describe": true,
+      "it": true,
+      "pit": true,
+      "expect": true,
+      "jest": true,
+      "beforeEach": true,
+      "afterEach": true,
+      "require": true
+    },
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "rules": {
+      "no-unused-vars": ["error", { "varsIgnorePattern": "[iI]gnored" }],
+      "react/jsx-closing-bracket-location": 1,
+      "react/jsx-indent-props": [1, 2],
+      "indent": [
+            "error",
+            2
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}
