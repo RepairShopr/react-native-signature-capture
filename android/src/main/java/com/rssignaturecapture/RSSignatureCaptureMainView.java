@@ -134,9 +134,6 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
   private boolean permissionsCheck() {
     int writePermission = ContextCompat.checkSelfPermission(mReactContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     if (writePermission != PackageManager.PERMISSION_GRANTED) {
-      String[] PERMISSIONS = {
-          Manifest.permission.WRITE_EXTERNAL_STORAGE,
-      };
       String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
       ActivityCompat.requestPermissions(mActivity, permissions, 1);
       return false;
@@ -187,7 +184,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
         String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         WritableMap event = Arguments.createMap();
-        event.putString("pathName", outputFile.getAbsolutePath());
+        event.putString("pathName", "file://" + outputFile.getAbsolutePath());
         event.putString("encoded", encoded);
         mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "topChange", event);
       } catch (IOException e) {
