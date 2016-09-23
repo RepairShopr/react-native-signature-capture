@@ -60,6 +60,7 @@
 		sign = [[PPSSignatureView alloc]
 						initWithFrame: CGRectMake(0, 0, screen.width, screen.height)
 						context: _context];
+		sign.manager = manager;
 		
 		[self addSubview:sign];
 		
