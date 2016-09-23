@@ -1,19 +1,13 @@
+var React, { PropTypes, Component } import 'react';
+var ReactNative, {
+  requireNativeComponent,
+  View,
+  UIManager,
+  DeviceEventEmitter
+} import 'react-native';
 
-'use strict';
 
-var ReactNative = require('react-native');
-var React = require('react');
-var {
-    PropTypes
-} = React;
-var {
-    requireNativeComponent,
-    View,
-    UIManager,
-    DeviceEventEmitter
-} = ReactNative;
-
-class SignatureCapture extends React.Component {
+class SignatureCapture extends Component {
 
     constructor() {
         super();
@@ -23,23 +17,20 @@ class SignatureCapture extends React.Component {
     onChange(event) {
 
         if(event.nativeEvent.pathName){
-
-            if (!this.props.onSaveEvent) {
-                return;
+            if (this.props.onSaveEvent) {
+              this.props.onSaveEvent({
+                  pathName: event.nativeEvent.pathName,
+                  encoded: event.nativeEvent.encoded,
+              });
             }
-            this.props.onSaveEvent({
-                pathName: event.nativeEvent.pathName,
-                encoded: event.nativeEvent.encoded,
-            });
         }
 
         if(event.nativeEvent.dragged){
-            if (!this.props.onDragEvent) {
-                return;
+            if (this.props.onDragEvent) {
+              this.props.onDragEvent({
+                  dragged: event.nativeEvent.dragged
+              });
             }
-            this.props.onDragEvent({
-                dragged: event.nativeEvent.dragged
-            });
         }
     }
 
@@ -59,7 +50,7 @@ class SignatureCapture extends React.Component {
 
     render() {
         return (
-            <RSSignatureView {...this.props} style={{ flex: 1 }} onChange={this.onChange} />
+            <RSSignatureView {...this.props} onChange={this.onChange} />
         );
     }
 
@@ -94,4 +85,4 @@ var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture
     nativeOnly: { onChange: true }
 });
 
-module.exports = SignatureCapture;
+export default SignatureCapture;
