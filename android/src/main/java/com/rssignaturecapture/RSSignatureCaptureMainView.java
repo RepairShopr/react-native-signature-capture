@@ -39,6 +39,8 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
   String viewMode = "portrait";
   Boolean showNativeButtons = true;
   int maxSize = 500;
+  String saveFilePath = "saved_signature";
+  String fileName = "signature";
 
   public RSSignatureCaptureMainView(Context context, Activity activity) {
     super(context);
@@ -59,6 +61,14 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
 
   public void setSaveFileInExtStorage(Boolean saveFileInExtStorage) {
     this.saveFileInExtStorage = saveFileInExtStorage;
+  }
+
+  public void setSaveFilePath(String saveFilePath) {
+    this.saveFilePath = saveFilePath;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
   }
 
   public void setViewMode(String viewMode) {
@@ -132,11 +142,10 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
    * save the signature to an sd card directory
    */
   final void saveImage() {
-
     String root = Environment.getExternalStorageDirectory().toString();
 
     // the directory where the signature will be saved
-    File myDir = new File(root + "/saved_signature");
+    File myDir = new File(root + "/" + saveFilePath);
 
     // make the directory if it does not exist yet
     if (!myDir.exists()) {
@@ -144,7 +153,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     }
 
     // set the file name of your choice
-    String fname = "signature.png";
+    String fname = fileName + ".png";
 
     // in our case, we delete the previous file, you can remove this
     File file = new File(myDir, fname);

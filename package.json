@@ -1,5 +1,5 @@
 {
-  "name": "react-native-signature-capture",
+  "name": "react-native-signature-capture-configurable",
   "version": "0.4.2",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RepairShopr/react-native-signature-capture.git"
+    "url": "git+https://github.com/Nuvoex/react-native-signature-capture.git"
   },
   "keywords": [
     "react-component",
@@ -22,7 +22,7 @@
   "author": "RepairShopr",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
+    "url": "https://github.com/Nuvoex/react-native-signature-capture/issues"
   },
-  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme"
+  "homepage": "https://github.com/Nuvoex/react-native-signature-capture#readme"
 }

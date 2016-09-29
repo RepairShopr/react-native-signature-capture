@@ -21,6 +21,8 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	public static final String PROPS_VIEW_MODE = "viewMode";
 	public static final String PROPS_SHOW_NATIVE_BUTTONS="showNativeButtons";
 	public static final String PROPS_MAX_SIZE="maxSize";
+	public static final String PROPS_SAVE_FILE_PATH = "saveFilePath";
+	public static final String PROPS_FILE_NAME = "fileName";
 
 	public static final int COMMAND_SAVE_IMAGE = 1;
 	public static final int COMMAND_RESET_IMAGE = 2;
@@ -41,6 +43,22 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 		Log.d("setFileInExtStorage:", "" + saveFile);
 		if(view!=null){
 			view.setSaveFileInExtStorage(saveFile);
+		}
+	}
+
+	@ReactProp(name = PROPS_SAVE_FILE_PATH)
+	public void setSaveFilePath(RSSignatureCaptureMainView view, @Nullable String saveFilePath) {
+		Log.d("saveFilePath:", saveFilePath);
+		if (view != null) {
+			view.setSaveFilePath(saveFilePath);
+		}
+	}
+
+	@ReactProp(name = PROPS_FILE_NAME)
+	public void setImageName(RSSignatureCaptureMainView view, @Nullable String fileName) {
+		Log.d("imageName:", fileName);
+		if (view != null) {
+			view.setFileName(fileName);
 		}
 	}
 
