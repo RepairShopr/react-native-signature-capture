@@ -24,6 +24,7 @@
 
 - (instancetype)init
 {
+	_showNativeButtons = YES;
 	if ((self = [super init])) {
 		_border = [CAShapeLayer layer];
 		_border.strokeColor = [UIColor blackColor].CGColor;
@@ -59,6 +60,7 @@
 		sign = [[PPSSignatureView alloc]
 						initWithFrame: CGRectMake(0, 0, screen.width, screen.height)
 						context: _context];
+		sign.manager = manager;
 		
 		[self addSubview:sign];
 		

@@ -14,30 +14,40 @@ class SignatureCapture extends Component {
   }
 
   onChange(event) {
-
     if(event.nativeEvent.pathName){
-      if (this.props.onSaveEvent) {
-        this.props.onSaveEvent({
-          pathName: event.nativeEvent.pathName,
-          encoded: event.nativeEvent.encoded,
-        });
+      if (!this.props.onSaveEvent) {
+        return;
       }
+      this.props.onSaveEvent({
+        pathName: event.nativeEvent.pathName,
+        encoded: event.nativeEvent.encoded,
+      });
     }
 
     if(event.nativeEvent.dragged){
-      if (this.props.onDragEvent) {
-        this.props.onDragEvent({
-          dragged: event.nativeEvent.dragged
-        });
+      if (!this.props.onDragEvent) {
+        return;
       }
+      this.props.onDragEvent({
+        dragged: event.nativeEvent.dragged
+      });
     }
   }
 
   componentDidMount() {
-    this.subscription = DeviceEventEmitter.addListener(
-      'onSaveEvent',
-      this.props.onSaveEvent
-    );
+    if (this.props.onSaveEvent) {
+      this.subscription = DeviceEventEmitter.addListener(
+        'onSaveEvent',
+        this.props.onSaveEvent
+      );
+    }
+
+    if (this.props.onDragEvent) {
+      this.subscription = DeviceEventEmitter.addListener(
+        'onDragEvent',
+        this.props.onDragEvent
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -57,7 +67,7 @@ class SignatureCapture extends Component {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this),
       UIManager.RSSignatureView.Commands.saveImage,
-      []
+      [],
     );
   }
 
@@ -65,10 +75,11 @@ class SignatureCapture extends Component {
     UIManager.dispatchViewManagerCommand(
       ReactNative.findNodeHandle(this),
       UIManager.RSSignatureView.Commands.resetImage,
-      []
+      [],
     );
   }
 }
+
 
 SignatureCapture.propTypes = {
   ...View.propTypes,
@@ -77,7 +88,7 @@ SignatureCapture.propTypes = {
   saveImageFileInExtStorage: PropTypes.bool,
   viewMode: PropTypes.string,
   showNativeButtons: PropTypes.bool,
-  maxSize:PropTypes.number
+  maxSize: PropTypes.number
 };
 
 var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {
