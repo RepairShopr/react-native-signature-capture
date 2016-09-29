@@ -7,16 +7,16 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 
 public class RSSignatureCaptureContextModule extends ReactContextBaseJavaModule {
 
-    public RSSignatureCaptureContextModule(ReactApplicationContext reactContext) {
-        super(reactContext);
-    }
+  public RSSignatureCaptureContextModule(ReactApplicationContext reactContext) {
+    super(reactContext);
+  }
 
-    @Override
-    public String getName() {
-        return "RSSignatureContextModule";
-    }
+  @Override
+  public String getName() {
+    return "RSSignatureContextModule";
+  }
 
-    public Activity getActivity() {
-        return this.getCurrentActivity();
-    }
+  public Activity getActivity() {
+    return this.getCurrentActivity();
+  }
 }
