@@ -105,6 +105,10 @@ class CustomComponent extends Component {
 
 + **saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
 
++ **saveFilePath** : Path where the image will be saved if saveImageFileInExtStorage is true. Only works on Android
+
++ **fileName** : Name of the signature image file if saved to external storage. Only works on Android
+
 + **showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset".
 
 + **viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
