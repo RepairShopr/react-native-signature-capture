@@ -44,10 +44,19 @@ class SignatureCapture extends React.Component {
     }
 
     componentDidMount() {
-        this.subscription = DeviceEventEmitter.addListener(
-            'onSaveEvent',
-            this.props.onSaveEvent
-        );
+        if (this.props.onSaveEvent) {
+            this.subscription = DeviceEventEmitter.addListener(
+                'onSaveEvent',
+                this.props.onSaveEvent
+            );
+        }
+
+        if (this.props.onDragEvent) {
+            this.subscription = DeviceEventEmitter.addListener(
+                'onDragEvent',
+                this.props.onDragEvent
+            );
+        }
     }
 
     componentWillUnmount() {
@@ -65,7 +74,7 @@ class SignatureCapture extends React.Component {
 
     saveImage() {
         UIManager.dispatchViewManagerCommand(
-            React.findNodeHandle(this),
+            ReactNative.findNodeHandle(this),
             UIManager.RSSignatureView.Commands.saveImage,
             [],
         );
@@ -73,7 +82,7 @@ class SignatureCapture extends React.Component {
 
     resetImage() {
         UIManager.dispatchViewManagerCommand(
-            React.findNodeHandle(this),
+            ReactNative.findNodeHandle(this),
             UIManager.RSSignatureView.Commands.resetImage,
             [],
         );

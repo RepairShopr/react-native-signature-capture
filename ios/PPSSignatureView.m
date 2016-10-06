@@ -1,5 +1,6 @@
 #import "PPSSignatureView.h"
 #import <OpenGLES/ES2/glext.h>
+#import "RSSignatureViewManager.h"
 
 #define             STROKE_WIDTH_MIN 0.004 // Stroke width determined by touch velocity
 #define             STROKE_WIDTH_MAX 0.030
@@ -201,7 +202,6 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, dotsLength);
 	}
 }
-
 
 - (void)erase {
 	length = 0;
@@ -414,6 +414,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 		addVertex(&length, previousVertex);
 		
 		self.hasSignature = YES;
+		[self.manager publishDraggedEvent];
 		
 	} else if ([p state] == UIGestureRecognizerStateChanged) {
 		
