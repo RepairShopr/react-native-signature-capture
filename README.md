@@ -115,7 +115,7 @@ class CustomComponent extends Component {
 
 + **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
 
-+ **resetSign()** : when called it will clear the image on the canvas
++ **resetImage()** : when called it will clear the image on the canvas
 
 ### Callback Props
 + **onSaveEvent** : Triggered when saveImage() is called, which return Base64 Encoded String and image file path.
