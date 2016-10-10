@@ -16,6 +16,11 @@
     "ios",
     "signature"
   ],
+  "devDependencies": {
+    "eslint": "^3.5.0",
+    "eslint-plugin-react": "^6.3.0",
+    "eslint-plugin-react-native": "^2.0.0"
+  },
   "peerDependencies": {
     "react-native": ">=0.29"
   },
