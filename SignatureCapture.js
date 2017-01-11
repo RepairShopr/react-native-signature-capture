@@ -69,7 +69,7 @@ class SignatureCapture extends React.Component {
 
     render() {
         return (
-            <RSSignatureView {...this.props} style={{ flex: 1 }} onChange={this.onChange} />
+            <RSSignatureView {...this.props} onChange={this.onChange} />
         );
     }
 
