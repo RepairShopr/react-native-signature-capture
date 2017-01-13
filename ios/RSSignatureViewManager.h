@@ -1,5 +1,5 @@
 #import "RSSignatureView.h"
-#import "RCTViewManager.h"
+#import <React/RCTViewManager.h>
 
 @interface RSSignatureViewManager : RCTViewManager
 @property (nonatomic, strong) RSSignatureView *signView;
