@@ -1,6 +1,6 @@
 {
   "name": "react-native-signature-capture",
-  "version": "0.4.4",
+  "version": "1.0.0",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "signature"
   ],
   "peerDependencies": {
-    "react-native": ">=0.29"
+    "react-native": ">=0.40"
   },
   "author": "RepairShopr",
   "license": "ISC",

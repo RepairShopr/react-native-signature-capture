@@ -1,7 +1,7 @@
 #import "RSSignatureViewManager.h"
-#import "RCTBridgeModule.h"
-#import "RCTBridge.h"
-#import "RCTEventDispatcher.h"
+#import <React/RCTBridgeModule.h>
+#import <React/RCTBridge.h>
+#import <React/RCTEventDispatcher.h>
 
 @implementation RSSignatureViewManager
 
