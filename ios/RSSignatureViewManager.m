@@ -13,6 +13,7 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_VIEW_PROPERTY(rotateClockwise, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(square, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showNativeButtons, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(viewMode, NSString *)
 
 
 -(dispatch_queue_t) methodQueue
