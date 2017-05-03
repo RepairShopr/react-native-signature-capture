@@ -73,7 +73,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	}
 
 	@ReactProp(name = PROPS_MIN_STROKE_WIDTH)
-	public void setPropsMinStrokeWidth(RSSignatureCaptureMainView view, @Nullable Integer minStrokeWidth) {
+	public void setPropsMinStrokeWidth(RSSignatureCaptureMainView view, @Nullable int minStrokeWidth) {
 		Log.d("minStrokeWidth:",  ""+minStrokeWidth);
 		if(view!=null){
 			view.setMinStrokeWidth(minStrokeWidth);
@@ -81,7 +81,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	}
 
 	@ReactProp(name = PROPS_MIN_STROKE_WIDTH)
-	public void setPropsMaxStrokeWidth(RSSignatureCaptureMainView view, @Nullable Integer maxStrokeWidth) {
+	public void setPropsMaxStrokeWidth(RSSignatureCaptureMainView view, @Nullable int maxStrokeWidth) {
 		Log.d("maxStrokeWidth:",  ""+maxStrokeWidth);
 		if(view!=null){
 			view.setMaxStrokeWidth(maxStrokeWidth);
