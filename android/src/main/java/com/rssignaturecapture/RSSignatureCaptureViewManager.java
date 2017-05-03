@@ -92,7 +92,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	}
 
 	@ReactProp(name = PROPS_STROKE_COLOR)
-	public void setPropsBackgroundColor(RSSignatureCaptureMainView view, @Nullable string color) {
+	public void setPropsBackgroundColor(RSSignatureCaptureMainView view, @Nullable String color) {
 		Log.d("strokeColor:",  ""+color);
 		if(view!=null){
 			view.getSignatureView().setStrokeColor(Color.parseColor(color));
@@ -100,7 +100,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	}
 
 	@ReactProp(name = PROPS_BACKGROUND_COLOR)
-	public void setPropsBackgroundColor(RSSignatureCaptureMainView view, @Nullable string color) {
+	public void setPropsBackgroundColor(RSSignatureCaptureMainView view, @Nullable String color) {
 		Log.d("backgroundColor:",  ""+color);
 		if(view!=null){
 			view.getSignatureView().setBackgroundColor(Color.parseColor(color));
