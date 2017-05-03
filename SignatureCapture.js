@@ -100,7 +100,9 @@ SignatureCapture.propTypes = {
     showTitleLabel: PropTypes.bool,
     maxSize:PropTypes.number,
     minStrokeWidth: PropTypes.number,
-    maxStrokeWidth: PropTypes.number
+    maxStrokeWidth: PropTypes.number,
+    strokeColor: PropTypes.string,
+    backgroundColor: PropTypes.string
 };
 
 var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {

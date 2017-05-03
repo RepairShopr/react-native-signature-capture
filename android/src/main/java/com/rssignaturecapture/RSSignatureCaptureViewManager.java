@@ -1,6 +1,7 @@
 package com.rssignaturecapture;
 
 import android.util.Log;
+import android.graphics.Color;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -23,6 +24,8 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	public static final String PROPS_MAX_SIZE="maxSize";
 	public static final String PROPS_MIN_STROKE_WIDTH="minStrokeWidth";
 	public static final String PROPS_MAX_STROKE_WIDTH="maxStrokeWidth";
+	public static final String PROPS_STROKE_COLOR="strokeColor";
+	public static final String PROPS_BACKGROUND_COLOR="backgroundColor";
 
 	public static final int COMMAND_SAVE_IMAGE = 1;
 	public static final int COMMAND_RESET_IMAGE = 2;
@@ -88,6 +91,21 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 		}
 	}
 
+	@ReactProp(name = PROPS_STROKE_COLOR)
+	public void setPropsBackgroundColor(RSSignatureCaptureMainView view, @Nullable string color) {
+		Log.d("strokeColor:",  ""+color);
+		if(view!=null){
+			view.getSignatureView().setStrokeColor(Color.parseColor(color));
+		}
+	}
+
+	@ReactProp(name = PROPS_BACKGROUND_COLOR)
+	public void setPropsBackgroundColor(RSSignatureCaptureMainView view, @Nullable string color) {
+		Log.d("backgroundColor:",  ""+color);
+		if(view!=null){
+			view.getSignatureView().setBackgroundColor(Color.parseColor(color));
+		}
+	}
 
 	@Override
 	public RSSignatureCaptureMainView createViewInstance(ThemedReactContext context) {
