@@ -16,6 +16,7 @@
 	UILabel *titleLabel;
 	BOOL _rotateClockwise;
 	BOOL _square;
+	BOOL _showBorder;
 	BOOL _showNativeButtons;
 	BOOL _showTitleLabel;
 }
@@ -25,6 +26,7 @@
 
 - (instancetype)init
 {
+  _showBorder = YES;
 	_showNativeButtons = YES;
 	_showTitleLabel = YES;
 	if ((self = [super init])) {
@@ -153,7 +155,7 @@
 
 	}
 	_loaded = true;
-	_border.path = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+	_border.path = _showBorder ? [UIBezierPath bezierPathWithRect:self.bounds].CGPath : nil;
 	_border.frame = self.bounds;
 }
 
@@ -163,6 +165,10 @@
 
 - (void)setSquare:(BOOL)square {
 	_square = square;
+}
+
+- (void)setShowBorder:(BOOL)showBorder {
+	_showBorder = showBorder;
 }
 
 - (void)setShowNativeButtons:(BOOL)showNativeButtons {
