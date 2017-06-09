@@ -93,12 +93,19 @@ class SignatureCapture extends React.Component {
 SignatureCapture.propTypes = {
   ...View.propTypes,
     rotateClockwise: PropTypes.bool,
+    strokeMarginBottom: PropTypes.number,
+    strokeMarginHorizontal: PropTypes.number,
     square: PropTypes.bool,
     saveImageFileInExtStorage: PropTypes.bool,
     viewMode: PropTypes.string,
     showNativeButtons: PropTypes.bool,
     showTitleLabel: PropTypes.bool,
     maxSize:PropTypes.number
+};
+
+SignatureCapture.defaultProps = {
+    strokeMarginBottom: 120,
+    strokeMarginHorizontal: 0,
 };
 
 var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {
