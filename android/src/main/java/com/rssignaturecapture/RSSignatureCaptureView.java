@@ -51,6 +51,7 @@ public class RSSignatureCaptureView extends View {
 	private Canvas mSignatureBitmapCanvas = null;
 	private SignatureCallback callback;
 	private boolean dragged = false;
+	private boolean multipleTouchDragged = false;
 	private int SCROLL_THRESHOLD = 5;
 
 	public interface SignatureCallback {
@@ -238,8 +239,10 @@ public class RSSignatureCaptureView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (!isEnabled() || event.getPointerCount() > 1)
+		if (!isEnabled() || event.getPointerCount() > 1 || (multipleTouchDragged && event.getAction() != MotionEvent.ACTION_UP)) {
+		    multipleTouchDragged = true;
 			return false;
+		}
 
 		float eventX = event.getX();
 		float eventY = event.getY();
@@ -271,6 +274,7 @@ public class RSSignatureCaptureView extends View {
                     sendDragEventToReact();
 			    }
                 dragged = false;
+                multipleTouchDragged = false;
 				break;
 
 			default:
