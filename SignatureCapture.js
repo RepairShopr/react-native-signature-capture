@@ -97,6 +97,7 @@ SignatureCapture.propTypes = {
     saveImageFileInExtStorage: PropTypes.bool,
     viewMode: PropTypes.string,
     showNativeButtons: PropTypes.bool,
+    showTitleLabel: PropTypes.bool,
     maxSize:PropTypes.number
 };
 
