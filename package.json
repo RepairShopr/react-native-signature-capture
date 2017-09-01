@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
   },
-  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme"
+  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  }
 }
