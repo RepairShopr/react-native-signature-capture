@@ -20,9 +20,4 @@ public class RSSignatureCapturePackage implements ReactPackage {
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
     return Arrays.<ViewManager>asList(new RSSignatureCaptureViewManager(reactContext));
   }
-
-  @Override
-  public List<Class<? extends JavaScriptModule>> createJSModules() {
-    return Arrays.asList();
-  }
 }
