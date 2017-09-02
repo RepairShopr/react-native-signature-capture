@@ -105,6 +105,8 @@ class CustomComponent extends Component {
 
 + **saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
 
++ **showBorder** : If this props is made to false, it will hide the dashed border (the border is shown on iOS only).
+
 + **showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset".
 
 + **showTitleLabel** : If this props is made to true, it will display the "x_ _ _ _ _ _ _ _ _ _ _" placeholder indicating where to sign.
