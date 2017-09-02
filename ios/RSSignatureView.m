@@ -18,6 +18,7 @@
 	BOOL _square;
 	BOOL _showNativeButtons;
 	BOOL _showTitleLabel;
+  NSString *_viewMode;
 }
 
 @synthesize sign;
@@ -66,11 +67,13 @@
 
 		[self addSubview:sign];
 
-		if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+
+		if ( [_viewMode  isEqual: @"portrait"] || deviceOrientation==UIInterfaceOrientationLandscapeRight || deviceOrientation==UIInterfaceOrientationLandscapeLeft ) {
 
 			if (_showTitleLabel) {
 				titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 24)];
-				[titleLabel setCenter:CGPointMake(self.bounds.size.width/2, self.bounds.size.height - 120)];
+				[titleLabel setCenter:CGPointMake(self.bounds.size.width/2, self.bounds.size.height - 20)];
 
 				[titleLabel setText:@"x_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"];
 				[titleLabel setLineBreakMode:NSLineBreakByClipping];
@@ -79,6 +82,8 @@
 				//[titleLabel setBackgroundColor:[UIColor greenColor]];
 				[sign addSubview:titleLabel];
 			}
+
+
 
 			if (_showNativeButtons) {
 				//Save button
@@ -121,6 +126,7 @@
 				//[titleLabel setBackgroundColor:[UIColor greenColor]];
 				[sign addSubview:titleLabel];
 			}
+
 
 			if (_showNativeButtons) {
 				//Save button
@@ -171,6 +177,10 @@
 
 - (void)setShowTitleLabel:(BOOL)showTitleLabel {
 	_showTitleLabel = showTitleLabel;
+}
+
+- (void)setViewMode:(NSString *)viewMode {
+    _viewMode = viewMode;
 }
 
 -(void) onSaveButtonPressed {
