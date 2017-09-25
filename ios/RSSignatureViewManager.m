@@ -2,6 +2,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
+#import <React/RCTUIManager.h>
 
 @implementation RSSignatureViewManager
 
@@ -28,19 +29,20 @@ RCT_EXPORT_VIEW_PROPERTY(showTitleLabel, BOOL)
 	return signView;
 }
 
-// Both of these methods needs to be called from the main thread so the
-// UI can clear out the signature.
 RCT_EXPORT_METHOD(saveImage:(nonnull NSNumber *)reactTag) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.signView saveImage];
-	});
+    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RSSignatureView *view = viewRegistry[reactTag];
+        [view saveImage];
+    }];
 }
 
 RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.signView erase];
-	});
+    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        RSSignatureView *view = viewRegistry[reactTag];
+        [view erase];
+    }];
 }
+
 
 -(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
 	[self.bridge.eventDispatcher
