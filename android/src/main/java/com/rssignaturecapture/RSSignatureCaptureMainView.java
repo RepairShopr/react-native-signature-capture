@@ -72,6 +72,10 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     }
   }
 
+  public void setStrokeColor(String strokeColor) {
+    this.signatureView.setStrokeColor(Color.parseColor(strokeColor));
+  }
+
   public void setShowNativeButtons(Boolean showNativeButtons) {
     this.showNativeButtons = showNativeButtons;
     if (showNativeButtons) {

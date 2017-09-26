@@ -21,6 +21,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	public static final String PROPS_VIEW_MODE = "viewMode";
 	public static final String PROPS_SHOW_NATIVE_BUTTONS="showNativeButtons";
 	public static final String PROPS_MAX_SIZE="maxSize";
+	public static final String PROPS_STROKE_COLOR="strokeColor";
 
 	public static final int COMMAND_SAVE_IMAGE = 1;
 	public static final int COMMAND_RESET_IMAGE = 2;
@@ -34,6 +35,14 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	@Override
 	public String getName() {
 		return "RSSignatureView";
+	}
+
+	@ReactProp(name = PROPS_STROKE_COLOR)
+	public void setStrokeColor(RSSignatureCaptureMainView view, @Nullable String strokeColor) {
+		Log.d("setStrokeColor:", "" + strokeColor);
+		if(view!=null) {
+			view.setStrokeColor(strokeColor);
+		}
 	}
 
 	@ReactProp(name = PROPS_SAVE_IMAGE_FILE)
