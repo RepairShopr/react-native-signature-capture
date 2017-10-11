@@ -174,10 +174,10 @@
 }
 
 -(void) onSaveButtonPressed {
-	[self saveImage];
+	[self saveImage: nil];
 }
 
--(void) saveImage {
+-(void) saveImage:(NSNumber *)reactTag {
 	saveButton.hidden = YES;
 	clearButton.hidden = YES;
 	UIImage *signImage = [self.sign signatureImage: _rotateClockwise withSquare:_square];
@@ -208,7 +208,10 @@
 		//UInt32 result = [attrs fileSize];
 
 		NSString *base64Encoded = [imageData base64EncodedStringWithOptions:0];
-		[self.manager publishSaveImageEvent: tempPath withEncoded:base64Encoded];
+		[self.manager
+			publishSaveImageEvent: tempPath
+			withEncoded:base64Encoded
+      withReactTag: reactTag];
 	}
 }
 

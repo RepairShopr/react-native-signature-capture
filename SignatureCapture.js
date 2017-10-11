@@ -15,38 +15,17 @@ class SignatureCapture extends React.Component {
 
     constructor() {
         super();
-        this.onChange = this.onChange.bind(this);
         this.subscriptions = [];
-    }
-
-    onChange(event) {
-
-        if(event.nativeEvent.pathName){
-
-            if (!this.props.onSaveEvent) {
-                return;
-            }
-            this.props.onSaveEvent({
-                pathName: event.nativeEvent.pathName,
-                encoded: event.nativeEvent.encoded,
-            });
-        }
-
-        if(event.nativeEvent.dragged){
-            if (!this.props.onDragEvent) {
-                return;
-            }
-            this.props.onDragEvent({
-                dragged: event.nativeEvent.dragged
-            });
-        }
     }
 
     componentDidMount() {
         if (this.props.onSaveEvent) {
             let sub = DeviceEventEmitter.addListener(
                 'onSaveEvent',
-                this.props.onSaveEvent
+                (payload) => {
+                  if(payload.reactTag === ReactNative.findNodeHandle(this))
+                    this.props.onSaveEvent(payload)
+                }
             );
             this.subscriptions.push(sub);
         }
@@ -58,6 +37,8 @@ class SignatureCapture extends React.Component {
             );
             this.subscriptions.push(sub);
         }
+
+        console.log(this.subscriptions);
     }
 
     componentWillUnmount() {
@@ -67,7 +48,7 @@ class SignatureCapture extends React.Component {
 
     render() {
         return (
-            <RSSignatureView {...this.props} onChange={this.onChange} />
+            <RSSignatureView {...this.props} />
         );
     }
 

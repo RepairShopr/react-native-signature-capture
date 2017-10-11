@@ -5,6 +5,6 @@
 @property (nonatomic, strong) RSSignatureView *signView;
 -(void) saveImage:(nonnull NSNumber *)reactTag;
 -(void) resetImage:(nonnull NSNumber *)reactTag;
--(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded;
+-(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded withReactTag: (NSNumber *) reactTag;
 -(void) publishDraggedEvent;
 @end

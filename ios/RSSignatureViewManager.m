@@ -32,7 +32,7 @@ RCT_EXPORT_VIEW_PROPERTY(showTitleLabel, BOOL)
 RCT_EXPORT_METHOD(saveImage:(nonnull NSNumber *)reactTag) {
     [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RSSignatureView *view = viewRegistry[reactTag];
-        [view saveImage];
+        [view saveImage: reactTag];
     }];
 }
 
@@ -44,13 +44,16 @@ RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
 }
 
 
--(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
+-(void) publishSaveImageEvent:(NSString *) aTempPath
+				withEncoded: (NSString *) aEncoded
+				withReactTag: (NSNumber *) reactTag {
 	[self.bridge.eventDispatcher
 	 sendDeviceEventWithName:@"onSaveEvent"
 	 body:@{
 					@"pathName": aTempPath,
-					@"encoded": aEncoded
-					}];
+					@"encoded": aEncoded,
+          @"reactTag": reactTag
+				}];
 }
 
 -(void) publishDraggedEvent {
