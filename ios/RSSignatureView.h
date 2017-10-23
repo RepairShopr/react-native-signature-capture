@@ -10,6 +10,6 @@
 @property (nonatomic, strong) RSSignatureViewManager *manager;
 -(void) onSaveButtonPressed;
 -(void) onClearButtonPressed;
--(void) saveImage;
+-(void) saveImage:(NSNumber *)reactTag;
 -(void) erase;
 @end
