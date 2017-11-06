@@ -414,7 +414,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 		addVertex(&length, previousVertex);
 		
 		self.hasSignature = YES;
-		[self.manager publishDraggedEvent];
+                ((RSSignatureView *)self.superview).onDrag(@{@"dragged": @YES});
 		
 	} else if ([p state] == UIGestureRecognizerStateChanged) {
 		
