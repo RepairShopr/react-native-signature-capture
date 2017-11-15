@@ -6,20 +6,10 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.app.Activity;
-
-import com.rssignaturecapture.RSSignatureCaptureViewManager;
-
 public class RSSignatureCapturePackage implements ReactPackage {
-  private Activity mCurrentActivity;
-
-  public RSSignatureCapturePackage(Activity activity) {
-    mCurrentActivity = activity;
-  }
 
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
@@ -27,11 +17,10 @@ public class RSSignatureCapturePackage implements ReactPackage {
   }
 
   @Override
-  public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
-    return Arrays.<ViewManager>asList(new RSSignatureCaptureViewManager(mCurrentActivity));
+  public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+    return Arrays.<ViewManager>asList(new RSSignatureCaptureViewManager(reactContext));
   }
 
-  @Override
   public List<Class<? extends JavaScriptModule>> createJSModules() {
     return Arrays.asList();
   }

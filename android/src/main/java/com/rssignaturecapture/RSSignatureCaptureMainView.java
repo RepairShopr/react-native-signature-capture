@@ -37,7 +37,9 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
   int mOriginalOrientation;
   Boolean saveFileInExtStorage = false;
   String viewMode = "portrait";
+  Boolean showBorder = true;
   Boolean showNativeButtons = true;
+  Boolean showTitleLabel = true;
   int maxSize = 500;
 
   public RSSignatureCaptureMainView(Context context, Activity activity) {

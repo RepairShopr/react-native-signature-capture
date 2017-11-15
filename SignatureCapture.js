@@ -1,57 +1,79 @@
 
 'use strict';
 
-var React = require('react-native');
+var ReactNative = require('react-native');
+var React = require('react');
+var PropTypes = require('prop-types');
 var {
-    PropTypes,
     requireNativeComponent,
     View,
-} = React;
-
-var UIManager = require('UIManager');
-
+    UIManager,
+    DeviceEventEmitter
+} = ReactNative;
 
 class SignatureCapture extends React.Component {
 
     constructor() {
         super();
         this.onChange = this.onChange.bind(this);
+        this.subscriptions = [];
     }
 
     onChange(event) {
-        console.log("Signature  ON Change Event");
-        
-        
-       if(event.nativeEvent.pathName){
-           
-           if (!this.props.onSaveEvent) {
-            return;
+
+        if(event.nativeEvent.pathName){
+
+            if (!this.props.onSaveEvent) {
+                return;
+            }
+            this.props.onSaveEvent({
+                pathName: event.nativeEvent.pathName,
+                encoded: event.nativeEvent.encoded,
+            });
         }
-        this.props.onSaveEvent({
-            pathName: event.nativeEvent.pathName,
-            encoded: event.nativeEvent.encoded,
-        });
-       }
-       
-       if(event.nativeEvent.dragged){
-           if (!this.props.onDragEvent) {
-            return;
+
+        if(event.nativeEvent.dragged){
+            if (!this.props.onDragEvent) {
+                return;
+            }
+            this.props.onDragEvent({
+                dragged: event.nativeEvent.dragged
+            });
         }
-        this.props.onDragEvent({
-            dragged: event.nativeEvent.dragged
-        });
-       }
-       }
+    }
+
+    componentDidMount() {
+        if (this.props.onSaveEvent) {
+            let sub = DeviceEventEmitter.addListener(
+                'onSaveEvent',
+                this.props.onSaveEvent
+            );
+            this.subscriptions.push(sub);
+        }
+
+        if (this.props.onDragEvent) {
+            let sub = DeviceEventEmitter.addListener(
+                'onDragEvent',
+                this.props.onDragEvent
+            );
+            this.subscriptions.push(sub);
+        }
+    }
+
+    componentWillUnmount() {
+        this.subscriptions.forEach(sub => sub.remove());
+        this.subscriptions = [];
+    }
 
     render() {
         return (
-            <RSSignatureView {...this.props} style={{ flex: 1 }} onChange={this.onChange} />
+            <RSSignatureView {...this.props} onChange={this.onChange} />
         );
     }
 
     saveImage() {
         UIManager.dispatchViewManagerCommand(
-            React.findNodeHandle(this),
+            ReactNative.findNodeHandle(this),
             UIManager.RSSignatureView.Commands.saveImage,
             [],
         );
@@ -59,7 +81,7 @@ class SignatureCapture extends React.Component {
 
     resetImage() {
         UIManager.dispatchViewManagerCommand(
-            React.findNodeHandle(this),
+            ReactNative.findNodeHandle(this),
             UIManager.RSSignatureView.Commands.resetImage,
             [],
         );
@@ -72,7 +94,9 @@ SignatureCapture.propTypes = {
     square: PropTypes.bool,
     saveImageFileInExtStorage: PropTypes.bool,
     viewMode: PropTypes.string,
+    showBorder: PropTypes.bool,
     showNativeButtons: PropTypes.bool,
+    showTitleLabel: PropTypes.bool,
     maxSize:PropTypes.number
 };
 

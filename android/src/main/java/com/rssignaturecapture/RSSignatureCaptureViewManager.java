@@ -1,25 +1,21 @@
 package com.rssignaturecapture;
 
-import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.SimpleViewManager;
-import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.bridge.ReactMethod;
+import android.util.Log;
+
 import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
+import com.rssignaturecapture.RSSignatureCaptureContextModule;
+
 import java.util.Map;
 
 import javax.annotation.Nullable;
-import android.util.Log;
-
-
-import android.app.Activity;
-import java.lang.Boolean;
-
 
 public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureCaptureMainView> {
-	private Activity mCurrentActivity;
 
 	public static final String PROPS_SAVE_IMAGE_FILE="saveImageFileInExtStorage";
 	public static final String PROPS_VIEW_MODE = "viewMode";
@@ -29,9 +25,10 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	public static final int COMMAND_SAVE_IMAGE = 1;
 	public static final int COMMAND_RESET_IMAGE = 2;
 
+	private RSSignatureCaptureContextModule mContextModule;
 
-	public RSSignatureCaptureViewManager(Activity activity) {
-		mCurrentActivity = activity;
+	public RSSignatureCaptureViewManager(ReactApplicationContext reactContext) {
+		mContextModule = new RSSignatureCaptureContextModule(reactContext);
 	}
 
 	@Override
@@ -77,7 +74,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	@Override
 	public RSSignatureCaptureMainView createViewInstance(ThemedReactContext context) {
 		Log.d("React"," View manager createViewInstance:");
-		return new RSSignatureCaptureMainView(context, mCurrentActivity);
+		return new RSSignatureCaptureMainView(context, mContextModule.getActivity());
 	}
 
 	@Override
