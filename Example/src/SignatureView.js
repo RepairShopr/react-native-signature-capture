@@ -33,25 +33,26 @@ class SignatureView extends Component {
   }
 
   show(display) {
-    this.setState({visible: display});
+    this.setState({ visible: display });
   }
 
   render() {
-    const {visible} = this.state;
+    const { visible } = this.state;
 
     return (
       <Modal transparent={false} visible={visible} onRequestClose={this._onRequreClose.bind(this)}>
         <View style={modalViewStyle}>
-          <View style={{padding: 10, flexDirection: 'row'}}>
+          <View style={{ padding: 10, flexDirection: 'row' }}>
             <Text onPress={this._onPressClose.bind(this)}>{' x '}</Text>
-            <View style={{flex: 1, alignItems: 'center'}}>
-              <Text style={{fontSize: 14}}>Please write your signature.</Text>
+            <View style={{ flex: 1, alignItems: 'center' }}>
+              <Text style={{ fontSize: 14 }}>Please write your signature.</Text>
             </View>
           </View>
           <SignatureCapture
-              style={{flex: 1, width: '100%'}}
+            style={{ flex: 1, width: '100%' }}
             onDragEvent={this._onDragEvent.bind(this)}
             onSaveEvent={this._onSaveEvent.bind(this)}
+            backgroundColor="transparent"  // Supported formats are: #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray' 
           />
         </View>
       </Modal>
@@ -68,7 +69,7 @@ class SignatureView extends Component {
 
   _onDragEvent() {
     // This callback will be called when the user enters signature
-   console.log("dragged");
+    console.log("dragged");
   }
 
   _onSaveEvent(result) {

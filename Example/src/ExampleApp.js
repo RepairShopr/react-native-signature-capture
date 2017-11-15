@@ -23,21 +23,21 @@ class ExampleApp extends Component {
   }
 
   render() {
-    const {data} = this.state;
+    const { data } = this.state;
     return (
       <View style={flexCenter}>
         <TouchableOpacity onPress={this._showSignatureView.bind(this)}>
-          <View style={[flexCenter, {padding: 10}]}>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+          <View style={[flexCenter, { padding: 10 }]}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
               {data ? 'This is a your signature.' : 'Click here.'}
             </Text>
-            <View style={{paddingBottom: 10}} />
+            <View style={{ paddingBottom: 10 }} />
             {data &&
-              <View style={{backgroundColor: 'white'}}>
+              <View >
                 <Image
                   resizeMode={'contain'}
-                  style={{width: 300, height: 300}}
-                  source={{uri: data}}
+                  style={{ width: 300, height: 300 }}
+                  source={{ uri: data }}
                 />
               </View>
             }
@@ -58,7 +58,7 @@ class ExampleApp extends Component {
 
   _onSave(result) {
     const base64String = `data:image/png;base64,${result.encoded}`;
-    this.setState({data: base64String});
+    this.setState({ data: base64String });
 
     this._signatureView.show(false);
   }
