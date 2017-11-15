@@ -115,7 +115,8 @@ class CustomComponent extends Component {
 
 + **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
-+ **backgroundColor** (only in android for now) : sets the background color of the signature view. **if set to transparent the background will be transparent**. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
++ **backgroundColor** (only in android for now) : sets the background color of the signature view. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
++ + ```backgroundColor="transparent"```  -  background will be transparent
 
 ### Methods
 
