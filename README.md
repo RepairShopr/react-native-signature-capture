@@ -192,6 +192,7 @@ class RNSignatureExample extends Component {
     _onSaveEvent(result) {
         //result.encoded - for the base64 encoded png
         //result.pathName - for the file path name
+        //result.uri - for the file uri
         console.log(result);
     }
     _onDragEvent() {
