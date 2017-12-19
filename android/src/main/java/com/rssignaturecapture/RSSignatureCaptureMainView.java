@@ -135,6 +135,10 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
    */
   final void saveImage() {
 
+    if (this.signatureView.isEmpty()){
+      return;
+    }
+
     String root = Environment.getExternalStorageDirectory().toString();
 
     // the directory where the signature will be saved
