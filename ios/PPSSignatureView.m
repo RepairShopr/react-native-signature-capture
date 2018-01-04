@@ -118,6 +118,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 }
 
 - (void)commonInit {
+	[EAGLContext setCurrentContext:nil];
 	context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 	
 	if (context) {
