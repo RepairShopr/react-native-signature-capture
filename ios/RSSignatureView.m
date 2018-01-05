@@ -214,7 +214,10 @@
 		//UInt32 result = [attrs fileSize];
 
 		NSString *base64Encoded = [imageData base64EncodedStringWithOptions:0];
-		[self.manager publishSaveImageEvent: tempPath withEncoded:base64Encoded];
+                self.onSave(@{
+                  @"pathName": tempPath,
+                  @"encoded": base64Encoded
+                });
 	}
 }
 

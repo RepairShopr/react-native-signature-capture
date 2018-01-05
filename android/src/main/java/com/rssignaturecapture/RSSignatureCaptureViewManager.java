@@ -36,6 +36,17 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 		return "RSSignatureView";
 	}
 
+        @Override
+        @Nullable
+        public Map getExportedCustomDirectEventTypeConstants() {
+            return MapBuilder.of(
+                "saveSignature",
+                MapBuilder.of("registrationName", "onSave"),
+                "drag",
+                MapBuilder.of("registrationName", "onDrag")
+            );
+        }
+
 	@ReactProp(name = PROPS_SAVE_IMAGE_FILE)
 	public void setSaveImageFileInExtStorage(RSSignatureCaptureMainView view, @Nullable Boolean saveFile) {
 		Log.d("setFileInExtStorage:", "" + saveFile);

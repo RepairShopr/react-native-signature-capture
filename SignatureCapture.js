@@ -15,59 +15,32 @@ class SignatureCapture extends React.Component {
 
     constructor() {
         super();
-        this.onChange = this.onChange.bind(this);
-        this.subscriptions = [];
+        this.onSave = this.onSave.bind(this);
+        this.onDrag = this.onDrag.bind(this);
     }
 
-    onChange(event) {
-
-        if(event.nativeEvent.pathName){
-
-            if (!this.props.onSaveEvent) {
-                return;
-            }
-            this.props.onSaveEvent({
-                pathName: event.nativeEvent.pathName,
-                encoded: event.nativeEvent.encoded,
-            });
+    onSave(event) {
+        if (!this.props.onSaveEvent) {
+            return;
         }
-
-        if(event.nativeEvent.dragged){
-            if (!this.props.onDragEvent) {
-                return;
-            }
-            this.props.onDragEvent({
-                dragged: event.nativeEvent.dragged
-            });
-        }
+        this.props.onSaveEvent({
+            pathName: event.pathName,
+            encoded: event.nativeEvent.encoded,
+        });
     }
 
-    componentDidMount() {
-        if (this.props.onSaveEvent) {
-            let sub = DeviceEventEmitter.addListener(
-                'onSaveEvent',
-                this.props.onSaveEvent
-            );
-            this.subscriptions.push(sub);
+    onDrag(event) {
+        if (!this.props.onDragEvent) {
+            return;
         }
-
-        if (this.props.onDragEvent) {
-            let sub = DeviceEventEmitter.addListener(
-                'onDragEvent',
-                this.props.onDragEvent
-            );
-            this.subscriptions.push(sub);
-        }
-    }
-
-    componentWillUnmount() {
-        this.subscriptions.forEach(sub => sub.remove());
-        this.subscriptions = [];
+        this.props.onDragEvent({
+            dragged: event.dragged
+        });
     }
 
     render() {
         return (
-            <RSSignatureView {...this.props} onChange={this.onChange} />
+            <RSSignatureView {...this.props} onSave={this.onSave} onDrag={this.onDrag} />
         );
     }
 
@@ -89,7 +62,7 @@ class SignatureCapture extends React.Component {
 }
 
 SignatureCapture.propTypes = {
-  ...View.propTypes,
+    ...View.propTypes,
     rotateClockwise: PropTypes.bool,
     square: PropTypes.bool,
     saveImageFileInExtStorage: PropTypes.bool,
@@ -97,11 +70,13 @@ SignatureCapture.propTypes = {
     showBorder: PropTypes.bool,
     showNativeButtons: PropTypes.bool,
     showTitleLabel: PropTypes.bool,
-    maxSize:PropTypes.number
+    maxSize:PropTypes.number,
+    onSaveEvent: PropTypes.func,
+    onDragEvent: PropTypes.func,
 };
 
 var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {
-    nativeOnly: { onChange: true }
+    nativeOnly: { onSave: true, onDrag: true }
 });
 
 module.exports = SignatureCapture;
