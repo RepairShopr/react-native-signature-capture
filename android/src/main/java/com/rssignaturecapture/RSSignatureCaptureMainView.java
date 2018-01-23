@@ -59,6 +59,10 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
         ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
+  public RSSignatureCaptureView getSignatureView() {
+    return signatureView;
+  }
+
   public void setSaveFileInExtStorage(Boolean saveFileInExtStorage) {
     this.saveFileInExtStorage = saveFileInExtStorage;
   }
