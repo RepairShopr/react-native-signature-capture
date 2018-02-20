@@ -226,8 +226,3 @@ Library used:
 https://github.com/jharwig/PPSSignatureView
 
 https://github.com/gcacace/android-signaturepad
-
-
-How to contribute
------------------
-Submit a PR - also please don't be shy and email me. Lastly, I love to see how this project is doing in the wild! please email me screenshot of your app - jed.tiotuico@gmail.com (I will disclose the info, I will not tell anyone about it, I will not blog nor tweet it)
