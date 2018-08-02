@@ -29,7 +29,7 @@ import com.rssignaturecapture.utils.ControlTimedPoints;
 import com.rssignaturecapture.utils.Bezier;
 
 public class RSSignatureCaptureView extends View {
-	private static final float STROKE_WIDTH = 5f;
+	private static final float STROKE_WIDTH = 3f;
 	private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
 	private boolean mIsEmpty;
