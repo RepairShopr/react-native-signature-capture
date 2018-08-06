@@ -49,6 +49,7 @@ class SignatureView extends Component {
             </View>
           </View>
           <SignatureCapture
+              style={{flex: 1, width: '100%'}}
             onDragEvent={this._onDragEvent.bind(this)}
             onSaveEvent={this._onSaveEvent.bind(this)}
           />
