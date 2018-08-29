@@ -41,8 +41,11 @@ Add these lines in your file: android/settings.gradle
 ```
 ...
 
-include ':reactnativesignaturecapture',':app'
-project(':reactnativesignaturecapture').projectDir = new File(settingsDir, '../node_modules/react-native-signature-capture/android')
+include ':react-native-signature-capture'
+project(':react-native-signature-capture').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-signature-capture/android')
+
+...
+include ':app
 ```
 
 Add line in your file: android/app/build.gradle
@@ -52,7 +55,7 @@ Add line in your file: android/app/build.gradle
 
 dependencies {
     ...
-    compile project(':reactnativesignaturecapture') // <-- add this line
+    compile project(':react-native-signature-capture') // <-- add this line
 }
 ```
 
@@ -135,68 +138,66 @@ class CustomComponent extends Component {
  * https://github.com/facebook/react-native
  */
 
-var React = require('react');
-var ReactNative = require('react-native');
-
-var {Component} = React;
-
-var {
+import React, { PureComponent } from 'react';
+import {
     AppRegistry,
     StyleSheet,
     Text,
-    View, TouchableHighlight
-} = ReactNative;
+    View,
+    TouchableHighlight
+} from 'react-native';
 
 import SignatureCapture from 'react-native-signature-capture';
 
-class RNSignatureExample extends Component {
+class RNSignatureExample extends PureComponent {
     render() {
         return (
-            <View style={{ flex: 1, flexDirection: "column" }}>
-                <Text style={{alignItems:"center",justifyContent:"center"}}>Signature Capture Extended </Text>
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+                <Text style={{ alignItems: 'center', justifyContent: 'center' }}>Signature Capture Extended</Text>
                 <SignatureCapture
-                    style={[{flex:1},styles.signature]}
-                    ref="sign"
+                    style={styles.signature}
+                    ref='sign'
                     onSaveEvent={this._onSaveEvent}
                     onDragEvent={this._onDragEvent}
                     saveImageFileInExtStorage={false}
                     showNativeButtons={false}
                     showTitleLabel={false}
-                    viewMode={"portrait"}/>
+                    viewMode='portrait'
+                />
 
-                <View style={{ flex: 1, flexDirection: "row" }}>
-                    <TouchableHighlight style={styles.buttonStyle}
-                        onPress={() => { this.saveSign() } } >
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <TouchableHighlight
+                        style={styles.buttonStyle}
+                        onPress={this.saveSign} >
                         <Text>Save</Text>
                     </TouchableHighlight>
 
-                    <TouchableHighlight style={styles.buttonStyle}
-                        onPress={() => { this.resetSign() } } >
+                    <TouchableHighlight
+                        style={styles.buttonStyle}
+                        onPress={this.resetSign} >
                         <Text>Reset</Text>
                     </TouchableHighlight>
-
                 </View>
-
             </View>
         );
     }
 
-    saveSign() {
-        this.refs["sign"].saveImage();
+    saveSign = _ => {
+        this.refs['sign'].saveImage();
     }
 
-    resetSign() {
-        this.refs["sign"].resetImage();
+    resetSign = _ => {
+        this.refs['sign'].resetImage();
     }
 
-    _onSaveEvent(result) {
+    _onSaveEvent = result => {
         //result.encoded - for the base64 encoded png
         //result.pathName - for the file path name
         console.log(result);
     }
-    _onDragEvent() {
+    _onDragEvent = _ => {
          // This callback will be called when the user enters signature
-        console.log("dragged");
+        console.log('dragged');
     }
 }
 
@@ -207,7 +208,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     buttonStyle: {
-        flex: 1, justifyContent: "center", alignItems: "center", height: 50,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        height: 50,
         backgroundColor: "#eeeeee",
         margin: 10
     }
