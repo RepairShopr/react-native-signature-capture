@@ -193,8 +193,9 @@
 	saveButton.hidden = YES;
 	clearButton.hidden = YES;
 	UIImage *signImage = [self.sign signatureImage: _rotateClockwise withSquare:_square];
+    UIImage *trimmedSignImage = [self.sign trimmedSignatureImage: _rotateClockwise withSquare:_square];
 
-	saveButton.hidden = NO;
+    saveButton.hidden = NO;
 	clearButton.hidden = NO;
 
 	NSError *error;
@@ -202,6 +203,9 @@
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths firstObject];
 	NSString *tempPath = [documentsDirectory stringByAppendingFormat:[@"/" stringByAppendingString:_fileName]];
+    
+    NSString *trimmedFileName = [NSString stringWithFormat:@"%@_trimmed", _fileName];
+    NSString *trimmedTempPath = [documentsDirectory stringByAppendingFormat:[@"/" stringByAppendingString:trimmedFileName]];
 
 	//remove if file already exists
 	if ([[NSFileManager defaultManager] fileExistsAtPath:tempPath]) {
@@ -213,14 +217,23 @@
 
 	// Convert UIImage object into NSData (a wrapper for a stream of bytes) formatted according to PNG spec
 	NSData *imageData = UIImagePNGRepresentation(signImage);
+    NSData *trimmedImageData = UIImagePNGRepresentation(trimmedSignImage);
+
 	BOOL isSuccess = [imageData writeToFile:tempPath atomically:YES];
-	if (isSuccess) {
+    BOOL isSuccessTrimmed = [trimmedImageData writeToFile:trimmedTempPath atomically:YES];
+
+	if (isSuccess && isSuccessTrimmed) {
 		NSFileManager *man = [NSFileManager defaultManager];
 		NSDictionary *attrs = [man attributesOfItemAtPath:tempPath error: NULL];
 		//UInt32 result = [attrs fileSize];
 
 		NSString *base64Encoded = [imageData base64EncodedStringWithOptions:0];
-		[self.manager publishSaveImageEvent: tempPath withEncoded:base64Encoded];
+        NSString *base64TrimmedEncoded = [trimmedImageData base64EncodedStringWithOptions:0];
+
+        NSNumber  *width = [NSNumber numberWithInteger: CGImageGetWidth(trimmedSignImage.CGImage)];
+        NSNumber *height = [NSNumber numberWithInteger: CGImageGetHeight(trimmedSignImage.CGImage)];
+        
+        [self.manager publishSaveImageEvent:tempPath withEncoded:base64Encoded trimmedPath:trimmedTempPath withTrimmedEncoded:base64TrimmedEncoded width:width height:height];
 	}
 }
 
