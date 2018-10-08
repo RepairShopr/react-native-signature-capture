@@ -15,6 +15,6 @@
 - (UIImage *) signatureImage;
 - (UIImage *) signatureImage: (BOOL) rotatedImage;
 - (UIImage *) signatureImage: (BOOL) rotatedImage withSquare:(BOOL)square;
-- (UIImage *) trimmedSignatureImage: (BOOL) rotatedImage withSquare:(BOOL) square;
+- (UIImage *)trimmedSignatureImage: (BOOL) rotatedImage withSquare:(BOOL) square
 
 @end
