@@ -43,20 +43,12 @@ RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
 	});
 }
 
-// :(NSCharacterSet *)searchSet options:(NSStringCompareOptions)mask range:(NSRange)rangeOfReceiverToSearch;
--(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded
-                                            trimmedPath:(NSString *) trimmedPath withTrimmedEncoded: (NSString *) aTrimmedEncoded
-                                            width:(NSNumber *) trimmedWidth
-                                            height:(NSNumber *) trimmedHeight {
+-(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
 	[self.bridge.eventDispatcher
 	 sendDeviceEventWithName:@"onSaveEvent"
 	 body:@{
 					@"pathName": aTempPath,
-					@"encoded": aEncoded,
-                    @"pathNameTrimmed": trimmedPath,
-                    @"encodedTrimmed": aTrimmedEncoded,
-                    @"width": trimmedWidth,
-                    @"height": trimmedHeight
+					@"encoded": aEncoded
 					}];
 }
 
