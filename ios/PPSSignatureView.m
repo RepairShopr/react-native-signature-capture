@@ -1,6 +1,7 @@
 #import "PPSSignatureView.h"
 #import <OpenGLES/ES2/glext.h>
 #import "RSSignatureViewManager.h"
+#import "UIImage+Trim.h"
 
 #define             STROKE_WIDTH_MIN 0.004 // Stroke width determined by touch velocity
 #define             STROKE_WIDTH_MAX 0.030
@@ -14,8 +15,8 @@
 #define             MAXIMUM_VERTECES 100000
 
 
-static GLKVector3 StrokeColor = { 0, 0, 0 };
-static float clearColor[4] = { 1, 1, 1, 0 };
+static GLKVector3 StrokeColor = { 0, 0, 0};
+static float clearColor[4] = { 1, 1, 1, 0};
 
 // Vertex structure containing 3D point and color
 struct PPSSignaturePoint
@@ -278,61 +279,31 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 	return scaledImage;
 }
 
-- (UIImage *)signatureImage
+- (NSArray *)signatureImage
 {
 	return [self signatureImage:false withSquare:false];
 }
-- (UIImage *)signatureImage: (BOOL) rotatedImage
+- (NSArray *)signatureImage: (BOOL) rotatedImage
 {
 	return [self signatureImage:rotatedImage withSquare:false];
 }
-- (UIImage *)signatureImage: (BOOL) rotatedImage withSquare:(BOOL) square
+- (NSArray *)signatureImage: (BOOL) rotatedImage withSquare:(BOOL) square
 {
-	if (!self.hasSignature)
-		return nil;
-	
-	UIImage *signatureImg;
-	UIImage *snapshot = [self snapshot];
-	[self erase];
-	
-	if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
-		//signature
-		if (square) {
-			signatureImg = [self reduceImage:snapshot toSize: CGSizeMake(400.0f, 400.0f)];
-		}
-		else {
-			signatureImg = snapshot;
-		}
-	}
-	else {
-		//rotate iphone signature - iphone's signature screen is always landscape
-		
-		if (rotatedImage) {
-			if (square) {
-				UIImage *rotatedImg = [self rotateImage:snapshot clockwise:false];
-				signatureImg = [self reduceImage:rotatedImg toSize: CGSizeMake(400.0f, 400.0f)];
-			}
-			else {
-				UIImage *rotatedImg = [self rotateImage:snapshot clockwise:false];
-				signatureImg = rotatedImg;
-			}
-		}
-		else {
-			if (square) {
-				signatureImg = [self reduceImage:snapshot toSize: CGSizeMake(400.0f, 400.0f)];
-			}
-			else {
-				signatureImg = snapshot;
-			}
-		}
-	}
-	
-	return signatureImg;
+    if (!self.hasSignature)
+    return nil;
+    
+    UIImage *signatureImg;
+    UIImage * trimmedImg;
+    UIImage *snapshot = [self snapshot];
+    [self erase];
+    
+    signatureImg = snapshot;
+    trimmedImg = [snapshot imageByTrimmingTransparentPixelsRequiringFullOpacity:YES];
+    
+    return [NSArray arrayWithObjects:signatureImg, trimmedImg, nil];
 }
 
-
 #pragma mark - Gesture Recognizers
-
 
 - (void)tap:(UITapGestureRecognizer *)t {
 	CGPoint l = [t locationInView:self];
@@ -486,7 +457,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
 	[super setBackgroundColor:backgroundColor];
-	
+    
 	CGFloat red, green, blue, alpha, white;
 	if ([backgroundColor getRed:&red green:&green blue:&blue alpha:&alpha]) {
 		clearColor[0] = red;

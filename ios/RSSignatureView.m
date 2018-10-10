@@ -19,7 +19,7 @@
 	BOOL _showBorder;
 	BOOL _showNativeButtons;
 	BOOL _showTitleLabel;
-	NSString * _fileName;
+    NSString * _fileName;
 }
 
 @synthesize sign;
@@ -30,7 +30,7 @@
   _showBorder = YES;
 	_showNativeButtons = YES;
 	_showTitleLabel = YES;
-	_fileName = @"signature.png";
+    _fileName = @"signature.png";
 	if ((self = [super init])) {
 		_border = [CAShapeLayer layer];
 		_border.strokeColor = [UIColor blackColor].CGColor;
@@ -190,38 +190,53 @@
 }
 
 -(void) saveImage {
-	saveButton.hidden = YES;
-	clearButton.hidden = YES;
-	UIImage *signImage = [self.sign signatureImage: _rotateClockwise withSquare:_square];
-
-	saveButton.hidden = NO;
-	clearButton.hidden = NO;
-
-	NSError *error;
-
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths firstObject];
-	NSString *tempPath = [documentsDirectory stringByAppendingFormat:[@"/" stringByAppendingString:_fileName]];
-
-	//remove if file already exists
-	if ([[NSFileManager defaultManager] fileExistsAtPath:tempPath]) {
-		[[NSFileManager defaultManager] removeItemAtPath:tempPath error:&error];
-		if (error) {
-			NSLog(@"Error: %@", error.debugDescription);
-		}
-	}
-
-	// Convert UIImage object into NSData (a wrapper for a stream of bytes) formatted according to PNG spec
-	NSData *imageData = UIImagePNGRepresentation(signImage);
-	BOOL isSuccess = [imageData writeToFile:tempPath atomically:YES];
-	if (isSuccess) {
-		NSFileManager *man = [NSFileManager defaultManager];
-		NSDictionary *attrs = [man attributesOfItemAtPath:tempPath error: NULL];
-		//UInt32 result = [attrs fileSize];
-
-		NSString *base64Encoded = [imageData base64EncodedStringWithOptions:0];
-		[self.manager publishSaveImageEvent: tempPath withEncoded:base64Encoded];
-	}
+    saveButton.hidden = YES;
+    clearButton.hidden = YES;
+    NSArray *images = [self.sign signatureImage: _rotateClockwise withSquare:_square];
+    
+    UIImage *signImage = [images firstObject];
+    UIImage *trimmedSignImage = [images lastObject];
+    
+    saveButton.hidden = NO;
+    clearButton.hidden = NO;
+    
+    NSError *error;
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    NSString *tempPath = [documentsDirectory stringByAppendingFormat:[@"/" stringByAppendingString:_fileName]];
+    
+    NSString *trimmedFileName = [NSString stringWithFormat:@"trimmed_%@", _fileName];
+    NSString *trimmedTempPath = [documentsDirectory stringByAppendingFormat:[@"/" stringByAppendingString:trimmedFileName]];
+    
+    //remove if file already exists
+    if ([[NSFileManager defaultManager] fileExistsAtPath:tempPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:tempPath error:&error];
+        if (error) {
+            NSLog(@"Error: %@", error.debugDescription);
+        }
+    }
+    
+    // Convert UIImage object into NSData (a wrapper for a stream of bytes) formatted according to PNG spec
+    NSData *imageData = UIImagePNGRepresentation(signImage);
+    NSData *trimmedImageData = UIImagePNGRepresentation(trimmedSignImage);
+    
+    BOOL isSuccess = [imageData writeToFile:tempPath atomically:YES];
+    BOOL isSuccessTrimmed = [trimmedImageData writeToFile:trimmedTempPath atomically:YES];
+    
+    if (isSuccess && isSuccessTrimmed) {
+        NSFileManager *man = [NSFileManager defaultManager];
+        NSDictionary *attrs = [man attributesOfItemAtPath:tempPath error: NULL];
+        //UInt32 result = [attrs fileSize];
+        
+        NSString *base64Encoded = [imageData base64EncodedStringWithOptions:0];
+        NSString *base64TrimmedEncoded = [trimmedImageData base64EncodedStringWithOptions:0];
+        
+        NSNumber  *width = [NSNumber numberWithInteger: CGImageGetWidth(trimmedSignImage.CGImage)];
+        NSNumber *height = [NSNumber numberWithInteger: CGImageGetHeight(trimmedSignImage.CGImage)];
+        
+        [self.manager publishSaveImageEvent:tempPath withEncoded:base64Encoded trimmedPath:trimmedTempPath withTrimmedEncoded:base64TrimmedEncoded width:width height:height];
+    }
 }
 
 -(void) onClearButtonPressed {

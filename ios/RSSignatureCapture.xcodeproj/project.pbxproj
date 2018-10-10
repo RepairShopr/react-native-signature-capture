@@ -10,6 +10,7 @@
 		0C53A9EE1B56134F004F2642 /* RSSignatureViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C53A9ED1B56134F004F2642 /* RSSignatureViewManager.m */; };
 		0C53A9F31B5613AF004F2642 /* PPSSignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C53A9F01B5613AF004F2642 /* PPSSignatureView.m */; };
 		0C53A9F41B5613AF004F2642 /* RSSignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C53A9F21B5613AF004F2642 /* RSSignatureView.m */; };
+		847B8F96216E348400EADF85 /* UIImage+Trim.m in Sources */ = {isa = PBXBuildFile; fileRef = 847B8F95216E348400EADF85 /* UIImage+Trim.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,8 @@
 		0C53A9F01B5613AF004F2642 /* PPSSignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPSSignatureView.m; sourceTree = "<group>"; };
 		0C53A9F11B5613AF004F2642 /* RSSignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSignatureView.h; sourceTree = "<group>"; };
 		0C53A9F21B5613AF004F2642 /* RSSignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSSignatureView.m; sourceTree = "<group>"; };
+		847B8F8E216DFCC600EADF85 /* UIImage+Trim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Trim.h"; path = "../../../../Downloads/Archive 2 3/UIImage+Trim.h"; sourceTree = "<group>"; };
+		847B8F95216E348400EADF85 /* UIImage+Trim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Trim.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,8 +51,10 @@
 		0C53A9951B56113D004F2642 = {
 			isa = PBXGroup;
 			children = (
+				847B8F8E216DFCC600EADF85 /* UIImage+Trim.h */,
 				0C53A9EF1B5613AF004F2642 /* PPSSignatureView.h */,
 				0C53A9F01B5613AF004F2642 /* PPSSignatureView.m */,
+				847B8F95216E348400EADF85 /* UIImage+Trim.m */,
 				0C53A9F11B5613AF004F2642 /* RSSignatureView.h */,
 				0C53A9F21B5613AF004F2642 /* RSSignatureView.m */,
 				0C53A9EC1B56134F004F2642 /* RSSignatureViewManager.h */,
@@ -123,6 +128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C53A9EE1B56134F004F2642 /* RSSignatureViewManager.m in Sources */,
+				847B8F96216E348400EADF85 /* UIImage+Trim.m in Sources */,
 				0C53A9F41B5613AF004F2642 /* RSSignatureView.m in Sources */,
 				0C53A9F31B5613AF004F2642 /* PPSSignatureView.m in Sources */,
 			);
