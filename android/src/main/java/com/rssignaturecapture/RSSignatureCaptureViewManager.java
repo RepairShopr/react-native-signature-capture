@@ -110,7 +110,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	@Override
 	public RSSignatureCaptureMainView createViewInstance(ThemedReactContext context) {
 		Log.d("React"," View manager createViewInstance:");
-		return new RSSignatureCaptureMainView(context, mContextModule.getActivity());
+		return new RSSignatureCaptureMainView(context, context.getCurrentActivity());
 	}
 
 	@Override
