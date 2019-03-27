@@ -1,6 +1,6 @@
 {
   "name": "react-native-signature-capture",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
   "scripts": {
