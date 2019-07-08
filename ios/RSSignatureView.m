@@ -198,7 +198,7 @@
 	// set the file name of your choice and make it unique so that
     // you can handle multiple signatures at once
 	NSString *uuid = [[NSUUID UUID] UUIDString];
-	NSString *fname = [uuid stringByAppendingString:"-signature.png"];
+	NSString *fname = [uuid stringByAppendingString:@"-signature.png"];
 	NSString *tempPath = [documentsDirectory stringByAppendingFormat:@"/%@", fname];
 
 	//remove if file already exists
