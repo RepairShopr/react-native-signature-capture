@@ -195,7 +195,11 @@
 
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths firstObject];
-	NSString *tempPath = [documentsDirectory stringByAppendingFormat:@"/signature.png"];
+	// set the file name of your choice and make it unique so that
+    // you can handle multiple signatures at once
+	NSString *uuid = [[NSUUID UUID] UUIDString];
+	NSString *fname = [uuid stringByAppendingString:"-signature.png"];
+	NSString *tempPath = [documentsDirectory stringByAppendingFormat:@"/%@", fname];
 
 	//remove if file already exists
 	if ([[NSFileManager defaultManager] fileExistsAtPath:tempPath]) {

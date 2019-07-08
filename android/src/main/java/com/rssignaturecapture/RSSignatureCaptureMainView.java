@@ -149,8 +149,11 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
       myDir.mkdirs();
     }
 
-    // set the file name of your choice
-    String fname = "signature.png";
+    // set the file name of your choice and make it unique so that
+    // you can handle multiple signatures at once
+    UUID uuid = UUID.randomUUID();
+    String uuidStr = uuid.toString();
+    String fname = uuidStr + "-signature.png";
 
     // in our case, we delete the previous file, you can remove this
     File file = new File(myDir, fname);
