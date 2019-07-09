@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import java.lang.Boolean;
+import java.util.UUID;
 
 public class RSSignatureCaptureMainView extends LinearLayout implements OnClickListener,RSSignatureCaptureView.SignatureCallback {
   LinearLayout buttonsLayout;
