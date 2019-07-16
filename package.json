@@ -1,14 +1,10 @@
 {
-  "name": "react-native-signature-capture",
-  "version": "0.4.9",
+  "name": "@carentogruppe/react-native-signature-capture",
+  "version": "0.4.11",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RepairShopr/react-native-signature-capture.git"
   },
   "keywords": [
     "react-component",
@@ -16,16 +12,17 @@
     "ios",
     "signature"
   ],
+  "author": "Charles Vinette",
+  "license": "MIT",
   "peerDependencies": {
-    "react-native": ">=0.47"
+    "react-native": ">=0.53.0"
   },
-  "author": "RepairShopr",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carentogruppe/react-native-signature-capture.git"
+  },
   "bugs": {
-    "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
+    "url": "https://github.com/carentogruppe/react-native-signature-capture/issues"
   },
-  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
-  "dependencies": {
-    "prop-types": "^15.5.10"
-  }
+  "homepage": "https://github.com/carentogruppe/react-native-signature-capture#readme"
 }

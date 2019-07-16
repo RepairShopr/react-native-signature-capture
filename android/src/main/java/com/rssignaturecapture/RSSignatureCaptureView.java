@@ -80,7 +80,7 @@ public class RSSignatureCaptureView extends View {
 		clear();
 
 		// set the bg color as white
-		this.setBackgroundColor(Color.WHITE);
+		this.setBackgroundColor(Color.TRANSPARENT);
 
 		// width and height should cover the screen
 		this.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -97,7 +97,7 @@ public class RSSignatureCaptureView extends View {
 
 		// set the signature bitmap
 		if (signatureBitmap == null) {
-			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
+			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
 		}
 
 		// important for saving signature
