@@ -56,7 +56,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     this.addView(signatureView);
 
     setLayoutParams(new android.view.ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT));
+            ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
   public RSSignatureCaptureView getSignatureView() {
@@ -101,7 +101,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
 
     // set orientation
     linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-    linearLayout.setBackgroundColor(Color.parseColor("#f7f7fa"));
+    linearLayout.setBackgroundColor(Color.TRANSPARENT);
 
     // set texts, tags and OnClickListener
     saveBtn.setText("Save");
