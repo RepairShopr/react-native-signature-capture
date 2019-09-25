@@ -1,5 +1,5 @@
 {
-  "name": "react-native-signature-capture",
+  "name": "@localz/react-native-signature-capture",
   "version": "1.0.0",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
