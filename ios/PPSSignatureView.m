@@ -418,7 +418,8 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
     GLvoid *mappedBuffer = mapVertexBuffer(vertexBuffer, &error);
 
     if (mappedBuffer == NULL) {
-        // TODO(rgrimm): Handle the error condition
+        self.hasSignature = YES;
+        [self.manager publishDraggedEvent];
     } else {
 
         CGPoint velocity = [p velocityInView:self];
