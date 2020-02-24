@@ -72,7 +72,7 @@ public class RSSignatureCaptureView extends View {
 		mMinWidth = convertDpToPx(4);
 		mMaxWidth = convertDpToPx(8);
 		mVelocityFilterWeight = 0.4f;
-		mPaint.setColor("#1d26b7");
+		mPaint.setColor(Color.parseColor("#1d26b7"));
 
 		//Dirty rectangle to update only the changed portion of the view
 		mDirtyRect = new RectF();
