@@ -69,10 +69,10 @@ public class RSSignatureCaptureView extends View {
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 
-		mMinWidth = convertDpToPx(8);
-		mMaxWidth = convertDpToPx(16);
+		mMinWidth = convertDpToPx(4);
+		mMaxWidth = convertDpToPx(8);
 		mVelocityFilterWeight = 0.4f;
-		mPaint.setColor(Color.BLACK);
+		mPaint.setColor("#1d26b7");
 
 		//Dirty rectangle to update only the changed portion of the view
 		mDirtyRect = new RectF();
@@ -80,7 +80,7 @@ public class RSSignatureCaptureView extends View {
 		clear();
 
 		// set the bg color as white
-		this.setBackgroundColor(Color.WHITE);
+		this.setBackgroundColor(Color.TRANSPARENT);
 
 		// width and height should cover the screen
 		this.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -97,7 +97,7 @@ public class RSSignatureCaptureView extends View {
 
 		// set the signature bitmap
 		if (signatureBitmap == null) {
-			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
+			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
 		}
 
 		// important for saving signature
