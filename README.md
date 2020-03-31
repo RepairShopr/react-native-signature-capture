@@ -115,9 +115,6 @@ class CustomComponent extends Component {
 
 + **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
-+ **backgroundColor** (only in android for now) : sets the background color of the signature view. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
-+ + ```backgroundColor="transparent"```  -  background will be transparent
-
 ### Methods
 
 + **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
@@ -229,3 +226,8 @@ Library used:
 https://github.com/jharwig/PPSSignatureView
 
 https://github.com/gcacace/android-signaturepad
+
+
+How to contribute
+-----------------
+Submit a PR - also please don't be shy and email me. Lastly, I love to see how this project is doing in the wild! please email me screenshot of your app - jed.tiotuico@gmail.com (I will disclose the info, I will not tell anyone about it, I will not blog nor tweet it)

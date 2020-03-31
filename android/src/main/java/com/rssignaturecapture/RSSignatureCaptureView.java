@@ -93,7 +93,7 @@ public class RSSignatureCaptureView extends View {
         try {
             isTransparent = backgroundColor.equalsIgnoreCase("transparent");
             if (isTransparent) {
-                this.setBackgroundColor(0x00FFFFFF);
+                this.setBackgroundColor(Color.TRANSPARENT);
             } else {
                 this.setBackgroundColor(Color.parseColor(backgroundColor));
             }

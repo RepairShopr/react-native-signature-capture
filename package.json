@@ -1,31 +1,58 @@
 {
-  "name": "react-native-signature-capture",
-  "version": "0.4.9",
+  "_from": "react-native-signature-capture@^0.4.8",
+  "_id": "react-native-signature-capture@0.4.9",
+  "_inBundle": false,
+  "_integrity": "sha512-N1O6f+IZPeNRePA00HvR3IERGHof5s1Y878SZZV69yEUZfT6rM9NoO9DAHbNiqZWIawHew1sCcY0R7dAN6BrjA==",
+  "_location": "/react-native-signature-capture",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "react-native-signature-capture@^0.4.8",
+    "name": "react-native-signature-capture",
+    "escapedName": "react-native-signature-capture",
+    "rawSpec": "^0.4.8",
+    "saveSpec": null,
+    "fetchSpec": "^0.4.8"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-signature-capture/-/react-native-signature-capture-0.4.9.tgz",
+  "_shasum": "c581cedef6cea42beea40d0f7d210173196b9d4a",
+  "_spec": "react-native-signature-capture@^0.4.8",
+  "_where": "/Users/johnfrancis/Projects/opensource/react-native-signature-capture/Example",
+  "author": {
+    "name": "RepairShopr"
+  },
+  "bugs": {
+    "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  },
+  "deprecated": false,
   "description": "Lets users sign their signatures",
-  "main": "SignatureCapture.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RepairShopr/react-native-signature-capture.git"
-  },
+  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
   "keywords": [
     "react-component",
     "react-native",
     "ios",
     "signature"
   ],
+  "license": "ISC",
+  "main": "SignatureCapture.js",
+  "name": "react-native-signature-capture",
   "peerDependencies": {
     "react-native": ">=0.47"
   },
-  "author": "RepairShopr",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RepairShopr/react-native-signature-capture.git"
   },
-  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
-  "dependencies": {
-    "prop-types": "^15.5.10"
-  }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.4.9"
 }
