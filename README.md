@@ -105,13 +105,17 @@ class CustomComponent extends Component {
 
 + **saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
 
-+ **showBorder** : If this props is made to false, it will hide the dashed border (the border is shown on iOS only).
++ **strokeColor** : sets the pencil color of the signature view. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
 
 + **showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset".
 
 + **showTitleLabel** : If this props is made to true, it will display the "x_ _ _ _ _ _ _ _ _ _ _" placeholder indicating where to sign.
 
 + **viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
+
++ **minStrokeWidth** : sets the width of the minimum stroke
+
++ **maxStrokeWidth** : sets the width of the maximum stroke
 
 + **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
