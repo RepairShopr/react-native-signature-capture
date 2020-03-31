@@ -237,6 +237,8 @@ Demo:
           />
 ```
 
+<img src="https://github.com/john1jan/react-native-signature-capture/blob/master/demo/Screenshot_1585649558.png" height=200/>
+
 
 
 
@@ -253,6 +255,8 @@ Demo:
           />
 ```
 
+<img src="https://github.com/john1jan/react-native-signature-capture/blob/master/demo/Screenshot_1585649598.png" height=200/>
+
 
 
 ```javascript
@@ -266,6 +270,7 @@ Demo:
           />
 ```
 
+<img src="https://github.com/john1jan/react-native-signature-capture/blob/master/demo/Screenshot_1585649693.png" height=200/>
 
 Please checkout the example folder (iOS/Android):
 https://github.com/RepairShopr/react-native-signature-capture/tree/master/Example
