@@ -3,7 +3,7 @@
 ## About this
 React Native library for capturing signature
 
-This repo is an advanced version of <a href="https://github.com/RepairShopr/react-native-signature-capture/pull/97">react-native-signature-capture</a> which new props to set background color and as very good usage example
+This repo is an advanced version of <a href="https://github.com/RepairShopr/react-native-signature-capture/pull/97">react-native-signature-capture</a> with new props to set background color and stroke color and as very good usage example
 
 There is a <a href="https://github.com/RepairShopr/react-native-signature-capture/pull/97">Pull request 97</a> submitted to the parent repo, but as the repo is not active right now you can directly use it from here
 
@@ -109,7 +109,7 @@ class CustomComponent extends Component {
 
 + **saveImageFileInExtStorage** : Make this props true, if you want to save the image file in external storage. Default is false. Warning: Image file will be visible in gallery or any other image browsing app
 
-+ **strokeColor** : sets the pencil color of the signature view. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
++ **strokeColor** [new]: sets the pencil color of the signature view. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
 
 + **showNativeButtons** : If this props is made to true, it will display the native buttons "Save" and "Reset".
 
@@ -117,13 +117,13 @@ class CustomComponent extends Component {
 
 + **viewMode** : "portrait" or "landscape" change the screen orientation based on boolean value
 
-+ **minStrokeWidth** : sets the width of the minimum stroke
++ **minStrokeWidth** [new] : sets the width of the minimum stroke
 
-+ **maxStrokeWidth** : sets the width of the maximum stroke
++ **maxStrokeWidth** [new]: sets the width of the maximum stroke
 
-+ **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
++ **maxSize**  [new]: sets the max size of the image maintains aspect ratio, default is 500
 
-+ **backgroundColor** (only in android for now) : sets the background color of the signature view. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
++ **backgroundColor** [new] (only in android for now) : sets the background color of the signature view. Supported Color format are  #RRGGBB #AARRGGBB 'red', 'blue', 'green', 'black', 'white', 'gray', 'cyan', 'magenta', 'yellow', 'lightgray', 'darkgray'.
 + + ```backgroundColor="transparent"```  -  background will be transparent
 
 ### Methods
