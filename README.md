@@ -1,7 +1,11 @@
-# react-native-signature-capture
+# react-native-signature-captur
 
 ## About this
 React Native library for capturing signature
+
+This repo is an advanced version of <a href="https://github.com/RepairShopr/react-native-signature-capture/pull/97">react-native-signature-capture</a> which new props to set background color and as very good usage example
+
+There is a <a href="https://github.com/RepairShopr/react-native-signature-capture/pull/97">Pull request 97</a> submitted to the parent repo, but as the repo is not active right now you can directly use it from here
 
 User would sign on the app and when you press the save button it returns the base64 encoded png
 
@@ -276,7 +280,7 @@ Demo:
 <img src="https://github.com/john1jan/react-native-signature-capture/blob/master/demo/Screenshot_1585649693.png" height=500/>
 
 Please checkout the example folder (iOS/Android):
-https://github.com/RepairShopr/react-native-signature-capture/tree/master/Example
+https://github.com/john1jan/react-native-signature-capture/tree/master/Example
 
 Library used:
 
