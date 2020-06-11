@@ -19,6 +19,7 @@
 	BOOL _showBorder;
 	BOOL _showNativeButtons;
 	BOOL _showTitleLabel;
+	UIColor *_backgroundColor;
 }
 
 @synthesize sign;
@@ -26,9 +27,10 @@
 
 - (instancetype)init
 {
-  _showBorder = YES;
+	_showBorder = YES;
 	_showNativeButtons = YES;
 	_showTitleLabel = YES;
+	_backgroundColor = UIColor.whiteColor;
 	if ((self = [super init])) {
 		_border = [CAShapeLayer layer];
 		_border.strokeColor = [UIColor blackColor].CGColor;
@@ -65,6 +67,7 @@
 						initWithFrame: CGRectMake(0, 0, screen.width, screen.height)
 						context: _context];
 		sign.manager = manager;
+		sign.backgroundColor = _backgroundColor;
 
 		[self addSubview:sign];
 
@@ -177,6 +180,10 @@
 
 - (void)setShowTitleLabel:(BOOL)showTitleLabel {
 	_showTitleLabel = showTitleLabel;
+}
+
+- (void)setBackgroundColor:(UIColor*)backgroundColor {
+	_backgroundColor = backgroundColor;
 }
 
 -(void) onSaveButtonPressed {

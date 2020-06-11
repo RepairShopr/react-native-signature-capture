@@ -115,6 +115,8 @@ class CustomComponent extends Component {
 
 + **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
++ **backgroundColor**: Sets the background color of the component. Defaults to white. May be 'transparent'.
+
 ### Methods
 
 + **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
@@ -162,6 +164,7 @@ class RNSignatureExample extends Component {
                     saveImageFileInExtStorage={false}
                     showNativeButtons={false}
                     showTitleLabel={false}
+                    backgroundColor="#ff00ff"
                     viewMode={"portrait"}/>
 
                 <View style={{ flex: 1, flexDirection: "row" }}>

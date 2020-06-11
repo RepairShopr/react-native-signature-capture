@@ -109,6 +109,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 	CGPoint previousMidPoint;
 	PPSSignaturePoint previousVertex;
 	PPSSignaturePoint currentVelocity;
+	UIColor* backgroundColor;
 }
 
 @end
