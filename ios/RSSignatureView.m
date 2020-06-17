@@ -20,6 +20,7 @@
 	BOOL _showNativeButtons;
 	BOOL _showTitleLabel;
 	UIColor *_backgroundColor;
+	UIColor *_strokeColor;
 }
 
 @synthesize sign;
@@ -31,6 +32,7 @@
 	_showNativeButtons = YES;
 	_showTitleLabel = YES;
 	_backgroundColor = UIColor.whiteColor;
+	_strokeColor = UIColor.blackColor;
 	if ((self = [super init])) {
 		_border = [CAShapeLayer layer];
 		_border.strokeColor = [UIColor blackColor].CGColor;
@@ -68,6 +70,7 @@
 						context: _context];
 		sign.manager = manager;
 		sign.backgroundColor = _backgroundColor;
+		sign.strokeColor = _strokeColor;
 
 		[self addSubview:sign];
 
@@ -184,6 +187,10 @@
 
 - (void)setBackgroundColor:(UIColor*)backgroundColor {
 	_backgroundColor = backgroundColor;
+}
+
+- (void)setStrokeColor:(UIColor*)strokeColor {
+	_strokeColor = strokeColor;
 }
 
 -(void) onSaveButtonPressed {

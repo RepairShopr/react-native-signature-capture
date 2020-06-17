@@ -117,6 +117,8 @@ class CustomComponent extends Component {
 
 + **backgroundColor**: Sets the background color of the component. Defaults to white. May be 'transparent'.
 
++ **strokeColor**: Sets the color of the signature. Defaults to black.
+
 ### Methods
 
 + **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
@@ -165,6 +167,7 @@ class RNSignatureExample extends Component {
                     showNativeButtons={false}
                     showTitleLabel={false}
                     backgroundColor="#ff00ff"
+                    strokeColor="#ffffff"
                     viewMode={"portrait"}/>
 
                 <View style={{ flex: 1, flexDirection: "row" }}>
