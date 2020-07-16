@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
+#import "UIImage+Trim.h"
 
 @class RSSignatureViewManager;
 
