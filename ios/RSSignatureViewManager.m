@@ -15,47 +15,55 @@ RCT_EXPORT_VIEW_PROPERTY(square, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showBorder, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showNativeButtons, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showTitleLabel, BOOL)
-
+RCT_EXPORT_VIEW_PROPERTY(fileName, NSString)
 
 -(dispatch_queue_t) methodQueue
 {
-	return dispatch_get_main_queue();
+    return dispatch_get_main_queue();
 }
 
 -(UIView *) view
 {
-	self.signView = [[RSSignatureView alloc] init];
-	self.signView.manager = self;
-	return signView;
+    self.signView = [[RSSignatureView alloc] init];
+    self.signView.manager = self;
+    return signView;
 }
 
 // Both of these methods needs to be called from the main thread so the
 // UI can clear out the signature.
 RCT_EXPORT_METHOD(saveImage:(nonnull NSNumber *)reactTag) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.signView saveImage];
-	});
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.signView saveImage];
+    });
 }
 
 RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.signView erase];
-	});
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.signView erase];
+    });
 }
 
--(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
-	[self.bridge.eventDispatcher
-	 sendDeviceEventWithName:@"onSaveEvent"
-	 body:@{
-					@"pathName": aTempPath,
-					@"encoded": aEncoded
-					}];
+// :(NSCharacterSet *)searchSet options:(NSStringCompareOptions)mask range:(NSRange)rangeOfReceiverToSearch;
+-(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded
+                  trimmedPath:(NSString *) trimmedPath withTrimmedEncoded: (NSString *) aTrimmedEncoded
+                        width:(NSNumber *) trimmedWidth
+                       height:(NSNumber *) trimmedHeight {
+    [self.bridge.eventDispatcher
+     sendDeviceEventWithName:@"onSaveEvent"
+     body:@{
+            @"pathName": aTempPath,
+            @"encoded": aEncoded,
+            @"pathNameTrimmed": trimmedPath,
+            @"encodedTrimmed": aTrimmedEncoded,
+            @"width": trimmedWidth,
+            @"height": trimmedHeight
+            }];
 }
 
 -(void) publishDraggedEvent {
-	[self.bridge.eventDispatcher
-	 sendDeviceEventWithName:@"onDragEvent"
-	 body:@{@"dragged": @YES}];
+    [self.bridge.eventDispatcher
+     sendDeviceEventWithName:@"onDragEvent"
+     body:@{@"dragged": @YES}];
 }
 
 @end

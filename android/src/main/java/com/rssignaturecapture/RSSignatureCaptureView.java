@@ -29,7 +29,7 @@ import com.rssignaturecapture.utils.ControlTimedPoints;
 import com.rssignaturecapture.utils.Bezier;
 
 public class RSSignatureCaptureView extends View {
-	private static final float STROKE_WIDTH = 5f;
+	private static final float STROKE_WIDTH = 3f;
 	private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
 	private boolean mIsEmpty;
@@ -92,13 +92,8 @@ public class RSSignatureCaptureView extends View {
 	* @return
 	*/
 	public Bitmap getSignature() {
-
-		Bitmap signatureBitmap = null;
-
-		// set the signature bitmap
-		if (signatureBitmap == null) {
-			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
-		}
+		// Initialize a Bitmap to contain the signature
+		Bitmap signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
 
 		// important for saving signature
 		final Canvas canvas = new Canvas(signatureBitmap);
