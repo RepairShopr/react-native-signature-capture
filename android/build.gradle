@@ -34,7 +34,7 @@ android {
 
 dependencies {
     implementation "com.android.support:appcompat-v7:26.1.0"
-    implementation("com.facebook.react:react-native:0.55.4") { force = true } // From node_modules
+    implementation("com.facebook.react:react-native:+") { force = true } // From node_modules
 }
 repositories {
     google()
