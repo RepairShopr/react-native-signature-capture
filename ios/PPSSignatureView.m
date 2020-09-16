@@ -2,6 +2,8 @@
 #import <OpenGLES/ES2/glext.h>
 #import "RSSignatureViewManager.h"
 
+#define                 ERROR_OPENGL 1
+
 #define             STROKE_WIDTH_MIN 0.004 // Stroke width determined by touch velocity
 #define             STROKE_WIDTH_MAX 0.030
 #define       STROKE_WIDTH_SMOOTHING 0.5   // Low pass filter alpha
@@ -29,25 +31,51 @@ typedef struct PPSSignaturePoint PPSSignaturePoint;
 // Maximum verteces in signature
 static const int maxLength = MAXIMUM_VERTECES;
 
+static inline GLvoid *mapVertexBuffer(GLuint bufferToMap, NSError **error) {
+    glBindBuffer(GL_ARRAY_BUFFER, bufferToMap);
+
+    GLvoid *data = glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);
+
+    if (data == NULL && error != NULL) {
+        GLenum glError = glGetError();
+
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        userInfo[@"GL_ERROR"] = @(glError);
+
+        *error = [NSError errorWithDomain:@"PPSSignatureView" code:ERROR_OPENGL userInfo:userInfo];
+    }
+
+    return data;
+}
 
 // Append vertex to array buffer
-static inline void addVertex(uint *length, PPSSignaturePoint v) {
+static inline void addVertex(GLvoid *mappedBuffer, uint *length, PPSSignaturePoint vertex) {
 	if ((*length) >= maxLength) {
 		return;
 	}
 
-	GLvoid *data = glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);
-	memcpy(data + sizeof(PPSSignaturePoint) * (*length), &v, sizeof(PPSSignaturePoint));
-	glUnmapBufferOES(GL_ARRAY_BUFFER);
-
+	memcpy(mappedBuffer + sizeof(PPSSignaturePoint) * (*length), &vertex, sizeof(PPSSignaturePoint));
 	(*length)++;
+}
+
+static inline void unmapVertexBuffer(GLvoid *mappedBuffer) {
+    if (mappedBuffer != NULL) {
+        GLboolean result = glUnmapBufferOES(GL_ARRAY_BUFFER);
+
+        if (result == GL_FALSE) {
+            // GL docs say this indicates some kind of corruption, and the buffer should be reinitialized.
+            // TODO(rgrimm): Reinitialize the buffer
+        }
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 static inline CGPoint QuadraticPointInCurve(CGPoint start, CGPoint end, CGPoint controlPoint, float percent) {
 	double a = pow((1.0 - percent), 2.0);
 	double b = 2.0 * percent * (1.0 - percent);
 	double c = pow(percent, 2.0);
-
+	
 	return (CGPoint) {
 		a * start.x + b * controlPoint.x + c * end.x,
 		a * start.y + b * controlPoint.y + c * end.y
@@ -68,7 +96,7 @@ static GLKVector3 perpendicular(PPSSignaturePoint p1, PPSSignaturePoint p2) {
 }
 
 static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVector3 color) {
-
+	
 	return (PPSSignaturePoint) {
 		{
 			(viewPoint.x / bounds.size.width * 2.0 - 1),
@@ -84,26 +112,26 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 	// OpenGL state
 	EAGLContext *context;
 	GLKBaseEffect *effect;
-
+	
 	GLuint vertexArray;
 	GLuint vertexBuffer;
 	GLuint dotsArray;
 	GLuint dotsBuffer;
-
-
-	// Array of verteces, with current length
+	
+	
+	// Array of vertices, with current length
 	PPSSignaturePoint SignatureVertexData[maxLength];
 	uint length;
-
+	
 	PPSSignaturePoint SignatureDotsData[maxLength];
 	uint dotsLength;
-
-
+	
+	
 	// Width of line at current and previous vertex
 	float penThickness;
 	float previousThickness;
-
-
+	
+	
 	// Previous points for quadratic bezier computations
 	CGPoint previousPoint;
 	CGPoint previousMidPoint;
@@ -119,34 +147,34 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 - (void)commonInit {
 	context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-
+	
 	if (context) {
-
+		
 		time(NULL);
-
+		
 		self.backgroundColor = [UIColor whiteColor];
 		self.opaque = NO;
-
+		
 		self.context = context;
 		self.drawableDepthFormat = GLKViewDrawableDepthFormat24;
 		self.enableSetNeedsDisplay = YES;
-
+		
 		// Turn on antialiasing
 		self.drawableMultisample = GLKViewDrawableMultisample4X;
-
+		
 		[self setupGL];
-
+		
 		// Capture touches
 		UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
 		pan.maximumNumberOfTouches = pan.minimumNumberOfTouches = 1;
 		pan.cancelsTouchesInView = YES;
 		[self addGestureRecognizer:pan];
-
+		
 		// For dotting your i's
 		UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
 		tap.cancelsTouchesInView = YES;
 		[self addGestureRecognizer:tap];
-
+		
 		// Erase with long press
 		UILongPressGestureRecognizer *longer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
 		longer.cancelsTouchesInView = YES;
@@ -175,11 +203,11 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 {
 	self.context = nil;
 	[self tearDownGL];
-
+	
 	if ([EAGLContext currentContext] == context) {
 		[EAGLContext setCurrentContext:nil];
 	}
-
+	
 	context = nil;
 }
 
@@ -188,15 +216,15 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 {
 	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
 	glClear(GL_COLOR_BUFFER_BIT);
-
+	
 	[effect prepareToDraw];
-
+	
 	// Drawing of signature lines
 	if (length > 2) {
 		glBindVertexArrayOES(vertexArray);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, length);
 	}
-
+	
 	if (dotsLength > 0) {
 		glBindVertexArrayOES(dotsArray);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, dotsLength);
@@ -207,13 +235,13 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 	length = 0;
 	dotsLength = 0;
 	self.hasSignature = NO;
-
+	
 	[self setNeedsDisplay];
 }
 
 - (UIImage*)imageByCombiningImage:(UIImage*)firstImage withImage:(UIImage*)secondImage {
 	UIImage *image = nil;
-
+	
 	CGSize newImageSize = CGSizeMake(MAX(firstImage.size.width, secondImage.size.width), MAX(firstImage.size.height, secondImage.size.height));
 	if (UIGraphicsBeginImageContextWithOptions != NULL) {
 		UIGraphicsBeginImageContextWithOptions(newImageSize, NO, [[UIScreen mainScreen] scale]);
@@ -226,7 +254,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 																			 roundf((newImageSize.height-secondImage.size.height)/2))];
 	image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
-
+	
 	return image;
 }
 
@@ -244,17 +272,17 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 											 scale:1.0
 								 orientation:clockwise ? UIImageOrientationRight : UIImageOrientationLeft]
 	 drawInRect:CGRectMake(0,0,size.height ,size.width)];
-
+	
 	UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
-
+	
 	return newImage;
 }
 
 - (UIImage*) reduceImage:(UIImage*)image toSize:(CGSize)newSize {
 	CGSize scaledSize = newSize;
 	float scaleFactor = 1.0;
-
+	
 	if(image.size.width > image.size.height) {
 		scaleFactor = image.size.width / image.size.height;
 		scaledSize.width = newSize.width;
@@ -265,16 +293,16 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 		scaledSize.height = newSize.height;
 		scaledSize.width = newSize.width / scaleFactor;
 	}
-
+	
 	NSLog(@"%f x %f", scaledSize.width, scaledSize.height);
-
+	
 	UIGraphicsBeginImageContext(scaledSize);
 	CGRect scaledImageRect = CGRectMake( 0.0, 0.0, scaledSize.width, scaledSize.height );
 	[image drawInRect:scaledImageRect];
-
+	
 	UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
-
+	
 	return scaledImage;
 }
 
@@ -290,10 +318,10 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 {
 	if (!self.hasSignature)
 		return nil;
-
+	
 	UIImage *signatureImg;
 	UIImage *snapshot = [self snapshot];
-
+	
 	if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
 		//signature
 		if (square) {
@@ -305,7 +333,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 	}
 	else {
 		//rotate iphone signature - iphone's signature screen is always landscape
-
+		
 		if (rotatedImage) {
 			if (square) {
 				UIImage *rotatedImg = [self rotateImage:snapshot clockwise:false];
@@ -325,7 +353,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 			}
 		}
 	}
-
+	
 	return signatureImg;
 }
 
@@ -334,44 +362,49 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 
 - (void)tap:(UITapGestureRecognizer *)t {
-	CGPoint l = [t locationInView:self];
+    CGPoint l = [t locationInView:self];
 
-	if (t.state == UIGestureRecognizerStateRecognized) {
-		glBindBuffer(GL_ARRAY_BUFFER, dotsBuffer);
+    if (t.state == UIGestureRecognizerStateRecognized) {
+        NSError *error;
+        GLvoid *mappedBuffer = mapVertexBuffer(dotsBuffer, &error);
 
-		PPSSignaturePoint touchPoint = ViewPointToGL(l, self.bounds, (GLKVector3){1, 1, 1});
-		addVertex(&dotsLength, touchPoint);
+        if (mappedBuffer == NULL) {
+            // TODO(rgrimm): Handle the error condition
+        } else {
+            PPSSignaturePoint touchPoint = ViewPointToGL(l, self.bounds, (GLKVector3) {1, 1, 1});
+            addVertex(mappedBuffer, &dotsLength, touchPoint);
 
-		PPSSignaturePoint centerPoint = touchPoint;
-		centerPoint.color = StrokeColor;
-		addVertex(&dotsLength, centerPoint);
+            PPSSignaturePoint centerPoint = touchPoint;
+            centerPoint.color = StrokeColor;
+            addVertex(mappedBuffer, &dotsLength, centerPoint);
 
-		static int segments = 20;
-		GLKVector2 radius = (GLKVector2){
-			clamp(0.00001, 0.02, penThickness * generateRandom(0.5, 1.5)),
-			clamp(0.00001, 0.02, penThickness * generateRandom(0.5, 1.5))
-		};
-		GLKVector2 velocityRadius = radius;
-		float angle = 0;
+            static int segments = 20;
+            GLKVector2 radius = (GLKVector2) {
+                clamp(0.00001, 0.02, penThickness * generateRandom(0.5, 1.5)),
+                clamp(0.00001, 0.02, penThickness * generateRandom(0.5, 1.5))
+            };
+            GLKVector2 velocityRadius = radius;
+            float angle = 0;
 
-		for (int i = 0; i <= segments; i++) {
+            for (int i = 0; i <= segments; i++) {
 
-			PPSSignaturePoint p = centerPoint;
-			p.vertex.x += velocityRadius.x * cosf(angle);
-			p.vertex.y += velocityRadius.y * sinf(angle);
+                PPSSignaturePoint p = centerPoint;
+                p.vertex.x += velocityRadius.x * cosf(angle);
+                p.vertex.y += velocityRadius.y * sinf(angle);
 
-			addVertex(&dotsLength, p);
-			addVertex(&dotsLength, centerPoint);
+                addVertex(mappedBuffer, &dotsLength, p);
+                addVertex(mappedBuffer, &dotsLength, centerPoint);
 
-			angle += M_PI * 2.0 / segments;
-		}
+                angle += M_PI * 2.0 / segments;
+            }
 
-		addVertex(&dotsLength, touchPoint);
+            addVertex(mappedBuffer, &dotsLength, touchPoint);
+        }
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
+        unmapVertexBuffer(mappedBuffer);
+    }
 
-	[self setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 
 
@@ -381,87 +414,95 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 - (void)pan:(UIPanGestureRecognizer *)p {
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    NSError *error;
+    GLvoid *mappedBuffer = mapVertexBuffer(vertexBuffer, &error);
 
-	CGPoint v = [p velocityInView:self];
-	CGPoint l = [p locationInView:self];
+    if (mappedBuffer == NULL) {
+        self.hasSignature = YES;
+        [self.manager publishDraggedEvent];
+    } else {
 
-	currentVelocity = ViewPointToGL(v, self.bounds, (GLKVector3){0,0,0});
-	float distance = 0.;
-	if (previousPoint.x > 0) {
-		distance = sqrtf((l.x - previousPoint.x) * (l.x - previousPoint.x) + (l.y - previousPoint.y) * (l.y - previousPoint.y));
-	}
+        CGPoint velocity = [p velocityInView:self];
+        CGPoint location = [p locationInView:self];
 
-	float velocityMagnitude = sqrtf(v.x*v.x + v.y*v.y);
-	float clampedVelocityMagnitude = clamp(VELOCITY_CLAMP_MIN, VELOCITY_CLAMP_MAX, velocityMagnitude);
-	float normalizedVelocity = (clampedVelocityMagnitude - VELOCITY_CLAMP_MIN) / (VELOCITY_CLAMP_MAX - VELOCITY_CLAMP_MIN);
+        currentVelocity = ViewPointToGL(velocity, self.bounds, (GLKVector3) {0, 0, 0});
+        float distance = 0.;
+        if (previousPoint.x > 0) {
+            distance = sqrtf((location.x - previousPoint.x) * (location.x - previousPoint.x) + (location.y - previousPoint.y) * (location.y - previousPoint.y));
+        }
 
-	float lowPassFilterAlpha = STROKE_WIDTH_SMOOTHING;
-	float newThickness = (STROKE_WIDTH_MAX - STROKE_WIDTH_MIN) * (1 - normalizedVelocity) + STROKE_WIDTH_MIN;
-	penThickness = penThickness * lowPassFilterAlpha + newThickness * (1 - lowPassFilterAlpha);
+        float velocityMagnitude = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
+        float clampedVelocityMagnitude = clamp(VELOCITY_CLAMP_MIN, VELOCITY_CLAMP_MAX, velocityMagnitude);
+        float normalizedVelocity = (clampedVelocityMagnitude - VELOCITY_CLAMP_MIN) / (VELOCITY_CLAMP_MAX - VELOCITY_CLAMP_MIN);
 
-	if ([p state] == UIGestureRecognizerStateBegan) {
+        float lowPassFilterAlpha = STROKE_WIDTH_SMOOTHING;
+        float newThickness = (STROKE_WIDTH_MAX - STROKE_WIDTH_MIN) * (1 - normalizedVelocity) + STROKE_WIDTH_MIN;
+        penThickness = penThickness * lowPassFilterAlpha + newThickness * (1 - lowPassFilterAlpha);
 
-		previousPoint = l;
-		previousMidPoint = l;
+        if ([p state] == UIGestureRecognizerStateBegan) {
 
-		PPSSignaturePoint startPoint = ViewPointToGL(l, self.bounds, (GLKVector3){1, 1, 1});
-		previousVertex = startPoint;
-		previousThickness = penThickness;
+            previousPoint = location;
+            previousMidPoint = location;
 
-		addVertex(&length, startPoint);
-		addVertex(&length, previousVertex);
-	} else if ([p state] == UIGestureRecognizerStateChanged) {
+            PPSSignaturePoint startPoint = ViewPointToGL(location, self.bounds, (GLKVector3) {1, 1, 1});
+            previousVertex = startPoint;
+            previousThickness = penThickness;
 
-		CGPoint mid = CGPointMake((l.x + previousPoint.x) / 2.0, (l.y + previousPoint.y) / 2.0);
+            addVertex(mappedBuffer, &length, startPoint);
+            addVertex(mappedBuffer, &length, previousVertex);
 
-		if (distance > QUADRATIC_DISTANCE_TOLERANCE) {
-			// Plot quadratic bezier instead of line
-			unsigned int i;
+            self.hasSignature = YES;
+            [self.manager publishDraggedEvent];
 
-			int segments = (int) distance / 1.5;
+        } else if ([p state] == UIGestureRecognizerStateChanged) {
 
-			float startPenThickness = previousThickness;
-			float endPenThickness = penThickness;
-			previousThickness = penThickness;
+            CGPoint mid = CGPointMake((location.x + previousPoint.x) / 2.0, (location.y + previousPoint.y) / 2.0);
 
-			for (i = 0; i < segments; i++)
-			{
-				penThickness = startPenThickness + ((endPenThickness - startPenThickness) / segments) * i;
+            if (distance > QUADRATIC_DISTANCE_TOLERANCE) {
+                // Plot quadratic bezier instead of line
+                unsigned int i;
 
-				CGPoint quadPoint = QuadraticPointInCurve(previousMidPoint, mid, previousPoint, (float)i / (float)(segments));
+                int segments = (int) distance / 1.5;
 
-				PPSSignaturePoint v = ViewPointToGL(quadPoint, self.bounds, StrokeColor);
-				[self addTriangleStripPointsForPrevious:previousVertex next:v];
+                float startPenThickness = previousThickness;
+                float endPenThickness = penThickness;
+                previousThickness = penThickness;
 
-				previousVertex = v;
-			}
-		} else if (distance > 1.0) {
+                for (i = 0; i < segments; i++) {
+                    penThickness = startPenThickness + ((endPenThickness - startPenThickness) / segments) * i;
 
-			PPSSignaturePoint v = ViewPointToGL(l, self.bounds, StrokeColor);
-			[self addTriangleStripPointsForPrevious:previousVertex next:v];
+                    CGPoint quadPoint = QuadraticPointInCurve(previousMidPoint, mid, previousPoint, (float) i / (float) (segments));
 
-			previousVertex = v;
-			previousThickness = penThickness;
-		}
+                    PPSSignaturePoint vertex = ViewPointToGL(quadPoint, self.bounds, StrokeColor);
+                    [self addTriangleStripPointsInMappedBuffer:mappedBuffer previous:previousVertex next:vertex];
 
-		previousPoint = l;
-		previousMidPoint = mid;
+                    previousVertex = vertex;
+                }
+            } else if (distance > 1.0) {
 
-	} else if (p.state == UIGestureRecognizerStateEnded | p.state == UIGestureRecognizerStateCancelled) {
+                PPSSignaturePoint vertex = ViewPointToGL(location, self.bounds, StrokeColor);
+                [self addTriangleStripPointsInMappedBuffer:mappedBuffer previous:previousVertex next:vertex];
 
-		PPSSignaturePoint v = ViewPointToGL(l, self.bounds, (GLKVector3){1, 1, 1});
-		addVertex(&length, v);
+                previousVertex = vertex;
+                previousThickness = penThickness;
+            }
 
-		previousVertex = v;
-		addVertex(&length, previousVertex);
+            previousPoint = location;
+            previousMidPoint = mid;
 
-		self.hasSignature = YES;
-		((RSSignatureView *)self.superview).onDrag(@{@"dragged": @YES});
+        } else if (p.state == UIGestureRecognizerStateEnded | p.state == UIGestureRecognizerStateCancelled) {
 
-	}
+            PPSSignaturePoint vertex = ViewPointToGL(location, self.bounds, (GLKVector3) {1, 1, 1});
+            addVertex(mappedBuffer, &length, vertex);
 
-	[self setNeedsDisplay];
+            previousVertex = vertex;
+            addVertex(mappedBuffer, &length, previousVertex);
+        }
+    }
+
+    unmapVertexBuffer(mappedBuffer);
+
+    [self setNeedsDisplay];
 }
 
 
@@ -485,7 +526,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
 	[super setBackgroundColor:backgroundColor];
-
+	
 	CGFloat red, green, blue, alpha, white;
 	if ([backgroundColor getRed:&red green:&green blue:&blue alpha:&alpha]) {
 		clearColor[0] = red;
@@ -508,88 +549,86 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 - (void)setupGL
 {
 	[EAGLContext setCurrentContext:context];
-
+	
 	effect = [[GLKBaseEffect alloc] init];
-
+	
 	[self updateStrokeColor];
-
-
+	
+	
 	glDisable(GL_DEPTH_TEST);
-
+	
 	// Signature Lines
 	glGenVertexArraysOES(1, &vertexArray);
 	glBindVertexArrayOES(vertexArray);
-
+	
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(SignatureVertexData), SignatureVertexData, GL_DYNAMIC_DRAW);
 	[self bindShaderAttributes];
-
-
+	
+	
 	// Signature Dots
 	glGenVertexArraysOES(1, &dotsArray);
 	glBindVertexArrayOES(dotsArray);
-
+	
 	glGenBuffers(1, &dotsBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, dotsBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(SignatureDotsData), SignatureDotsData, GL_DYNAMIC_DRAW);
 	[self bindShaderAttributes];
-
-
+	
+	
 	glBindVertexArrayOES(0);
-
-
+	
+	
 	// Perspective
 	GLKMatrix4 ortho = GLKMatrix4MakeOrtho(-1, 1, -1, 1, 0.1f, 2.0f);
 	effect.transform.projectionMatrix = ortho;
-
+	
 	GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -1.0f);
 	effect.transform.modelviewMatrix = modelViewMatrix;
-
+	
 	length = 0;
 	penThickness = 0.003;
 	previousPoint = CGPointMake(-100, -100);
 }
 
+- (void)addTriangleStripPointsInMappedBuffer:(GLvoid *)mappedBuffer previous:(PPSSignaturePoint)previous next:(PPSSignaturePoint)next {
+    float toTravel = penThickness / 2.0;
 
+    for (int i = 0; i < 2; i++) {
+        GLKVector3 p = perpendicular(previous, next);
+        GLKVector3 p1 = next.vertex;
+        GLKVector3 ref = GLKVector3Add(p1, p);
 
-- (void)addTriangleStripPointsForPrevious:(PPSSignaturePoint)previous next:(PPSSignaturePoint)next {
-	float toTravel = penThickness / 2.0;
+        float distance = GLKVector3Distance(p1, ref);
+        float difX = p1.x - ref.x;
+        float difY = p1.y - ref.y;
+        float ratio = -1.0 * (toTravel / distance);
 
-	for (int i = 0; i < 2; i++) {
-		GLKVector3 p = perpendicular(previous, next);
-		GLKVector3 p1 = next.vertex;
-		GLKVector3 ref = GLKVector3Add(p1, p);
+        difX = difX * ratio;
+        difY = difY * ratio;
 
-		float distance = GLKVector3Distance(p1, ref);
-		float difX = p1.x - ref.x;
-		float difY = p1.y - ref.y;
-		float ratio = -1.0 * (toTravel / distance);
+        PPSSignaturePoint stripPoint = {
+            { p1.x + difX, p1.y + difY, 0.0 },
+            StrokeColor
+        };
+        addVertex(mappedBuffer, &length, stripPoint);
 
-		difX = difX * ratio;
-		difY = difY * ratio;
-
-		PPSSignaturePoint stripPoint = {
-			{ p1.x + difX, p1.y + difY, 0.0 },
-			StrokeColor
-		};
-		addVertex(&length, stripPoint);
-
-		toTravel *= -1;
-	}
+        toTravel *= -1;
+    }
 }
 
 
 - (void)tearDownGL
 {
 	[EAGLContext setCurrentContext:context];
-
+	
 	glDeleteVertexArraysOES(1, &vertexArray);
 	glDeleteBuffers(1, &vertexBuffer);
-
+	
 	glDeleteVertexArraysOES(1, &dotsArray);
 	glDeleteBuffers(1, &dotsBuffer);
-
+	
 	effect = nil;
 }
 
