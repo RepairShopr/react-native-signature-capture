@@ -1,5 +1,6 @@
 package com.rssignaturecapture;
 
+import android.graphics.Canvas;
 import android.util.Log;
 import android.view.ViewGroup;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -11,6 +12,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ByteArrayOutputStream;
 
@@ -27,6 +29,8 @@ import android.widget.LinearLayout;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+
+import java.io.IOException;
 import java.lang.Boolean;
 
 public class RSSignatureCaptureMainView extends LinearLayout implements OnClickListener,RSSignatureCaptureView.SignatureCallback {
@@ -41,6 +45,10 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
   Boolean showNativeButtons = true;
   Boolean showTitleLabel = true;
   int maxSize = 500;
+  String fileName = "signature.png";
+
+  private final static int MIN_WIDTH = 300;
+  private final static int MIN_HEIGHT = 150;
 
   public RSSignatureCaptureMainView(Context context, Activity activity) {
     super(context);
@@ -91,7 +99,10 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     this.maxSize = size;
   }
 
-
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+  
   private LinearLayout buttonsLayout() {
 
     // create the UI programatically
@@ -139,7 +150,10 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
    */
   final void saveImage() {
 
-    String root = Environment.getExternalStorageDirectory().toString();
+    String root = mActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+    if (saveFileInExtStorage) {
+      root = Environment.getExternalStorageDirectory().toString();
+    }
 
     // the directory where the signature will be saved
     File myDir = new File(root + "/saved_signature");
@@ -150,41 +164,111 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     }
 
     // set the file name of your choice
-    String fname = "signature.png";
+    String signatureFileName = this.fileName;
+    String trimmedSignatureFileName = "trimmed_" + this.fileName;
 
     // in our case, we delete the previous file, you can remove this
-    File file = new File(myDir, fname);
-    if (file.exists()) {
-      file.delete();
+    File signatureFile = new File(myDir, signatureFileName);
+    File trimmedSignatureFile = new File(myDir, trimmedSignatureFileName);
+    if (signatureFile.exists()) {
+      signatureFile.delete();
+    }
+    if (trimmedSignatureFile.exists()) {
+      trimmedSignatureFile.delete();
     }
 
     try {
 
+      Bitmap original = this.signatureView.getSignature();
+      Bitmap trimmed = this.getTrimmedBitmap(original);
+
       Log.d("React Signature", "Save file-======:" + saveFileInExtStorage);
       // save the signature
-      if (saveFileInExtStorage) {
-        FileOutputStream out = new FileOutputStream(file);
-        this.signatureView.getSignature().compress(Bitmap.CompressFormat.PNG, 90, out);
-        out.flush();
-        out.close();
-      }
+      this.saveSignature(signatureFile, original);
+      this.saveSignature(trimmedSignatureFile, trimmed);
 
-
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      Bitmap resizedBitmap = getResizedBitmap(this.signatureView.getSignature());
-      resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-
-
-      byte[] byteArray = byteArrayOutputStream.toByteArray();
-      String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+      String originalEncoded = this.bitmapToBase64(original);
+      String trimmedEncoded = this.bitmapToBase64(trimmed);
 
       WritableMap event = Arguments.createMap();
-      event.putString("pathName", file.getAbsolutePath());
-      event.putString("encoded", encoded);
+      event.putString("pathName", signatureFile.getAbsolutePath());
+      event.putString("encoded", originalEncoded);
+      event.putString("pathNameTrimmed", trimmedSignatureFile.getAbsolutePath());
+      event.putString("encodedTrimmed", trimmedEncoded);
+      event.putInt("width", trimmed.getWidth());
+      event.putInt("height", trimmed.getHeight());
       ReactContext reactContext = (ReactContext) getContext();
       reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "topChange", event);
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  private String bitmapToBase64(Bitmap image) {
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+
+    byte[] byteArray = byteArrayOutputStream.toByteArray();
+    return Base64.encodeToString(byteArray, Base64.DEFAULT);
+  }
+
+  private void saveSignature(File file, Bitmap signature) {
+    try {
+      FileOutputStream out = new FileOutputStream(file);
+      signature.compress(Bitmap.CompressFormat.PNG, 90, out);
+      out.flush();
+      out.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private Bitmap getTrimmedBitmap(Bitmap image) {
+    int imgHeight = image.getHeight();
+    int imgWidth  = image.getWidth();
+
+    int left = imgWidth;
+    int right = 0;
+    int top = imgHeight;
+    int bottom = 0;
+
+    for(int y = 0; y < imgHeight; y++) {
+      for(int x = 0; x < imgWidth; x++) {
+        if(image.getPixel(x, y) != Color.WHITE){
+          if(x < left) {
+            left = x;
+          }
+          if(x > right) {
+            right = x;
+          }
+          if(y < top) {
+            top = y;
+          }
+          if(y > bottom) {
+            bottom = y;
+          }
+        }
+      }
+    }
+    Bitmap trimmed = Bitmap.createBitmap(image, left, top, right - left, bottom - top);
+    this.setTansparentBackground(trimmed);
+    if ((right - left) < MIN_WIDTH && (bottom - top) < MIN_HEIGHT) {
+      Bitmap cropped = Bitmap.createBitmap(MIN_WIDTH, MIN_HEIGHT, Bitmap.Config.ARGB_8888);
+      Canvas canvas = new Canvas(cropped);
+      canvas.drawColor(Color.TRANSPARENT);
+      canvas.drawBitmap(trimmed, (MIN_WIDTH - right + left) / 2, (MIN_HEIGHT - bottom + top) / 2, null);
+      return cropped;
+    }
+    return trimmed;
+  }
+
+  private void setTansparentBackground(Bitmap image) {
+    for (int x = 0; x < image.getWidth(); x++) {
+      for (int y = 0; y < image.getHeight(); y++) {
+        if (Color.WHITE == image.getPixel(x, y)) {
+          image.setPixel(x, y, Color.TRANSPARENT);
+        }
+      }
     }
   }
 

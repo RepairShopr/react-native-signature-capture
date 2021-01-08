@@ -4,13 +4,26 @@ def safeExtGet(prop, fallback) {
 
 apply plugin: 'com.android.library'
 
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+    }
+}
+
 android {
-    compileSdkVersion safeExtGet('compileSdkVersion', 23)
-    buildToolsVersion safeExtGet('buildToolsVersion', "23.0.1")
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
-        minSdkVersion safeExtGet('minSdkVersion', 16)
-        targetSdkVersion safeExtGet('targetSdkVersion', 22)
+        minSdkVersion 16
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         ndk {
@@ -20,6 +33,9 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', '23.0.0')}"
-    implementation "com.facebook.react:react-native:+"
+    implementation "com.android.support:appcompat-v7:26.1.0"
+    implementation("com.facebook.react:react-native:+") { force = true } // From node_modules
+}
+repositories {
+    google()
 }
