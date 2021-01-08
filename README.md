@@ -118,6 +118,9 @@ class CustomComponent extends Component {
 
 + **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
++ **fileName**  : sets the generated file name, default is signature.png
+
+
 ### Methods
 
 + **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
