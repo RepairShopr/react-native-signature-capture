@@ -118,6 +118,10 @@ class CustomComponent extends Component {
 
 + **maxSize**  : sets the max size of the image maintains aspect ratio, default is 500
 
++ **minStrokeWidth**  :  sets the min stroke line width (_Android only_)
+
++ **maxStrokeWidth**  :  sets the max stroke line width (_Android only_)
+
 ### Methods
 
 + **saveImage()** : when called it will save the image and returns the base 64 encoded string on onSaveEvent() callback
