@@ -2,10 +2,6 @@ package com.rssignaturecapture;
 
 import android.content.Context;
 
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-
-import android.util.Log;
 import android.view.View;
 import android.view.MotionEvent;
 
@@ -87,22 +83,25 @@ public class RSSignatureCaptureView extends View {
 	}
 
 	/**
-	* Get signature
-	*
-	* @return
+	* Get signature as a Bitmap
 	*/
 	public Bitmap getSignature() {
+		// Initialize a Bitmap to contain the signature
+		Bitmap signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
 
-		Bitmap signatureBitmap = null;
-
-		// set the signature bitmap
-		if (signatureBitmap == null) {
-			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
-		}
-
-		// important for saving signature
+		// This view's pixels constitute the signature, so draw this view onto the signatureBitmap
 		final Canvas canvas = new Canvas(signatureBitmap);
 		this.draw(canvas);
+
+		// The signatureBitmap now contains the signature with a white background,
+		// so we will change it to a transparent background.
+		for (int x = 0; x < signatureBitmap.getWidth(); x++) {
+			for (int y = 0; y < signatureBitmap.getHeight(); y++) {
+				if (Color.WHITE == signatureBitmap.getPixel(x, y)) {
+					signatureBitmap.setPixel(x, y, Color.TRANSPARENT);
+				}
+			}
+		}
 
 		return signatureBitmap;
 	}

@@ -19,6 +19,7 @@
 	BOOL _showBorder;
 	BOOL _showNativeButtons;
 	BOOL _showTitleLabel;
+    BOOL _saveImageFileInExtStorage;
 }
 
 @synthesize sign;
@@ -179,11 +180,15 @@
 	_showTitleLabel = showTitleLabel;
 }
 
--(void) onSaveButtonPressed {
+- (void)setSaveImageFileInExtStorage:(BOOL)saveImageFileInExtStorage {
+    _saveImageFileInExtStorage = saveImageFileInExtStorage;
+}
+
+- (void) onSaveButtonPressed {
 	[self saveImage];
 }
 
--(void) saveImage {
+- (void) saveImage {
 	saveButton.hidden = YES;
 	clearButton.hidden = YES;
 	UIImage *signImage = [self.sign signatureImage: _rotateClockwise withSquare:_square];
@@ -192,30 +197,32 @@
 	clearButton.hidden = NO;
 
 	NSError *error;
-
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths firstObject];
 	NSString *tempPath = [documentsDirectory stringByAppendingFormat:@"/signature.png"];
 
-	//remove if file already exists
+	// Remove if file already exists
 	if ([[NSFileManager defaultManager] fileExistsAtPath:tempPath]) {
 		[[NSFileManager defaultManager] removeItemAtPath:tempPath error:&error];
 		if (error) {
 			NSLog(@"Error: %@", error.debugDescription);
 		}
 	}
-
-	// Convert UIImage object into NSData (a wrapper for a stream of bytes) formatted according to PNG spec
-	NSData *imageData = UIImagePNGRepresentation(signImage);
-	BOOL isSuccess = [imageData writeToFile:tempPath atomically:YES];
-	if (isSuccess) {
-		NSFileManager *man = [NSFileManager defaultManager];
-		NSDictionary *attrs = [man attributesOfItemAtPath:tempPath error: NULL];
-		//UInt32 result = [attrs fileSize];
-
-		NSString *base64Encoded = [imageData base64EncodedStringWithOptions:0];
-		[self.manager publishSaveImageEvent: tempPath withEncoded:base64Encoded];
-	}
+    
+    NSData *imageData = UIImagePNGRepresentation(signImage);
+    NSString *base64Encoded = [imageData base64EncodedStringWithOptions:0];
+    
+    // Don't save to file system unless this prop was set to true
+    if (_saveImageFileInExtStorage) {
+        BOOL isSuccess = [imageData writeToFile:tempPath atomically:YES];
+        if (!isSuccess) NSLog(@"Error: Failed to write image to %@", tempPath);
+        [self.manager publishSaveImageEvent:tempPath withEncoded:base64Encoded];
+    
+    }
+    // Just return the base64 image if the prop was set to false or not specified
+    else {
+        [self.manager publishSaveImageEvent:@"" withEncoded:base64Encoded];
+    }
 }
 
 -(void) onClearButtonPressed {

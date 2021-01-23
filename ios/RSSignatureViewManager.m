@@ -15,6 +15,7 @@ RCT_EXPORT_VIEW_PROPERTY(square, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showBorder, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showNativeButtons, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showTitleLabel, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(saveImageFileInExtStorage, BOOL)
 
 
 -(dispatch_queue_t) methodQueue
@@ -47,9 +48,9 @@ RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
 	[self.bridge.eventDispatcher
 	 sendDeviceEventWithName:@"onSaveEvent"
 	 body:@{
-					@"pathName": aTempPath,
-					@"encoded": aEncoded
-					}];
+        @"pathName": aTempPath,
+        @"encoded": aEncoded
+     }];
 }
 
 -(void) publishDraggedEvent {
