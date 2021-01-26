@@ -175,6 +175,8 @@ class RNSignatureExample extends Component {
                     showTitleLabel={false}
                     backgroundColor="#ff00ff"
                     strokeColor="#ffffff"
+                    minStrokeWidth={4}
+                    maxStrokeWidth={4}
                     viewMode={"portrait"}/>
 
                 <View style={{ flex: 1, flexDirection: "row" }}>

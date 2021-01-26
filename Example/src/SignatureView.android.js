@@ -44,7 +44,10 @@ class SignatureView extends Component {
             style={{flex: 1, width: '100%'}}
             onDragEvent={this._onDragEvent.bind(this)}
             onSaveEvent={this._onSaveEvent.bind(this)}
-            backgroundColor='pink'
+            backgroundColor="#ff00ff"
+            strokeColor="#ffffff"
+            minStrokeWidth={4}
+            maxStrokeWidth={4}
           />
         </View>
       </Modal>
@@ -61,7 +64,7 @@ class SignatureView extends Component {
 
   _onDragEvent() {
     // This callback will be called when the user enters signature
-    console.log('dragged');
+    //console.log('dragged');
   }
 
   _onSaveEvent(result) {
