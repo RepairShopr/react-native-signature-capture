@@ -44,6 +44,7 @@ class SignatureView extends Component {
             style={{flex: 1, width: '100%'}}
             onDragEvent={this._onDragEvent.bind(this)}
             onSaveEvent={this._onSaveEvent.bind(this)}
+            backgroundColor='pink'
           />
         </View>
       </Modal>
