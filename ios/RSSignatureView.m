@@ -26,7 +26,7 @@
 
 - (instancetype)init
 {
-  _showBorder = YES;
+  _showBorder = NO;
 	_showNativeButtons = YES;
 	_showTitleLabel = YES;
 	if ((self = [super init])) {

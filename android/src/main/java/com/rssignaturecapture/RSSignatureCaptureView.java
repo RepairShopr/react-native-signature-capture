@@ -20,6 +20,7 @@ import android.util.DisplayMetrics;
 
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +70,8 @@ public class RSSignatureCaptureView extends View {
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 
-		mMinWidth = convertDpToPx(8);
-		mMaxWidth = convertDpToPx(16);
+		mMinWidth = convertDpToPx(5);
+		mMaxWidth = convertDpToPx(11);
 		mVelocityFilterWeight = 0.4f;
 		mPaint.setColor(Color.BLACK);
 
@@ -79,25 +80,25 @@ public class RSSignatureCaptureView extends View {
 
 		clear();
 
-		// set the bg color as white
-		this.setBackgroundColor(Color.WHITE);
+		// set the bg color
+		this.setBackgroundColor(Color.TRANSPARENT);
 
 		// width and height should cover the screen
 		this.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 	}
 
 	/**
-	* Get signature
-	*
-	* @return
-	*/
+	 * Get signature
+	 *
+	 * @return
+	 */
 	public Bitmap getSignature() {
 
 		Bitmap signatureBitmap = null;
 
 		// set the signature bitmap
 		if (signatureBitmap == null) {
-			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
+			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_4444 );
 		}
 
 		// important for saving signature
@@ -109,8 +110,8 @@ public class RSSignatureCaptureView extends View {
 
 
 	/**
-	* clear signature canvas
-	*/
+	 * clear signature canvas
+	 */
 	public void clearSignature() {
 		clear();
 	}
@@ -153,6 +154,19 @@ public class RSSignatureCaptureView extends View {
 			// Remove the first element from the list,
 			// so that we always have no more than 4 mPoints in mPoints array.
 			mPoints.remove(0);
+		} else if (mPoints.size() == 1){
+			ensureSignatureBitmap();
+
+//			float velocity = mVelocityFilterWeight * mLastVelocity
+//					+ (1 - mVelocityFilterWeight) * mLastVelocity;
+//
+//			// The new width is a function of the velocity. Higher velocities
+//			// correspond to thinner strokes.
+//			float newWidth = strokeWidth(velocity);
+
+			mPaint.setStrokeWidth(mLastWidth);
+			mSignatureBitmapCanvas.drawPoint(newPoint.x, newPoint.y, mPaint);
+			expandDirtyRect(newPoint.x, newPoint.y);
 		}
 	}
 
@@ -240,7 +254,7 @@ public class RSSignatureCaptureView extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (!isEnabled() || event.getPointerCount() > 1 || (multipleTouchDragged && event.getAction() != MotionEvent.ACTION_UP)) {
-		    multipleTouchDragged = true;
+			multipleTouchDragged = true;
 			return false;
 		}
 
@@ -249,32 +263,32 @@ public class RSSignatureCaptureView extends View {
 
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-                mLastTouchX = eventX;
-                mLastTouchY = eventY;
+				mLastTouchX = eventX;
+				mLastTouchY = eventY;
 				getParent().requestDisallowInterceptTouchEvent(true);
 				mPoints.clear();
 				mPath.moveTo(eventX, eventY);
 				addPoint(new TimedPoint(eventX, eventY));
 
 			case MotionEvent.ACTION_MOVE:
-                if((Math.abs(mLastTouchX - eventX) < SCROLL_THRESHOLD || Math.abs(mLastTouchY - eventY) < SCROLL_THRESHOLD) && dragged) {
-                    return false;
-                }
+				if((Math.abs(mLastTouchX - eventX) < SCROLL_THRESHOLD || Math.abs(mLastTouchY - eventY) < SCROLL_THRESHOLD) && dragged) {
+					return false;
+				}
 				resetDirtyRect(eventX, eventY);
 				addPoint(new TimedPoint(eventX, eventY));
-                dragged = true;
+				dragged = true;
 				break;
 
 			case MotionEvent.ACTION_UP:
-			    if(mPoints.size() >= 3) {
-                    resetDirtyRect(eventX, eventY);
-                    addPoint(new TimedPoint(eventX, eventY));
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                    setIsEmpty(false);
-                    sendDragEventToReact();
-			    }
-                dragged = false;
-                multipleTouchDragged = false;
+				if(mPoints.size() >= 3) {
+					resetDirtyRect(eventX, eventY);
+					addPoint(new TimedPoint(eventX, eventY));
+					getParent().requestDisallowInterceptTouchEvent(true);
+					setIsEmpty(false);
+					sendDragEventToReact();
+				}
+				dragged = false;
+				multipleTouchDragged = false;
 				break;
 
 			default:
@@ -356,8 +370,8 @@ public class RSSignatureCaptureView extends View {
 	public void clear() {
 		dragged = false;
 		mPoints = new ArrayList<TimedPoint>();
-		mLastVelocity = 0;
-		mLastWidth = (mMinWidth + mMaxWidth) / 2;
+		mLastVelocity = 3;
+		mLastWidth =  strokeWidth(mLastVelocity);
 		mPath.reset();
 
 		if (mSignatureBitmap != null) {
