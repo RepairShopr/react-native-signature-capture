@@ -3,6 +3,7 @@
   "version": "0.4.11",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,6 +27,8 @@
   },
   "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.5.10",
+    "@types/react": "^16",
+    "@types/react-native": ">=0.57"
   }
 }
