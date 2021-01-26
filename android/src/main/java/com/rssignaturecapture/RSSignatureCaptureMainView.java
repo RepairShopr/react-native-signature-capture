@@ -176,7 +176,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
 
 
       byte[] byteArray = byteArrayOutputStream.toByteArray();
-      String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+      String encoded = Base64.encodeToString(byteArray, Base64.NO_WRAP);
 
       WritableMap event = Arguments.createMap();
       event.putString("pathName", file.getAbsolutePath());
