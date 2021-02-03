@@ -269,6 +269,7 @@ public class RSSignatureCaptureView extends View {
 				mPoints.clear();
 				mPath.moveTo(eventX, eventY);
 				addPoint(new TimedPoint(eventX, eventY));
+				break;
 
 			case MotionEvent.ACTION_MOVE:
 				if((Math.abs(mLastTouchX - eventX) < SCROLL_THRESHOLD || Math.abs(mLastTouchY - eventY) < SCROLL_THRESHOLD) && dragged) {
