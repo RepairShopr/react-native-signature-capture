@@ -8,6 +8,6 @@
   "dependencies": {
     "react": "^15.4.1",
     "react-native": "0.42.3",
-    "react-native-signature-capture": "^0.4.8"
+    "react-native-signature-capture": "^0.4.11"
   }
 }
