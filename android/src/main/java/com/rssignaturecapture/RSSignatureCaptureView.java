@@ -69,10 +69,10 @@ public class RSSignatureCaptureView extends View {
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 
-		mMinWidth = convertDpToPx(4);
-		mMaxWidth = convertDpToPx(8);
+		mMinWidth = convertDpToPx(8);
+		mMaxWidth = convertDpToPx(16);
 		mVelocityFilterWeight = 0.4f;
-		mPaint.setColor(Color.parseColor("#1d26b7"));
+		mPaint.setColor(Color.BLACK);
 
 		//Dirty rectangle to update only the changed portion of the view
 		mDirtyRect = new RectF();
@@ -80,7 +80,7 @@ public class RSSignatureCaptureView extends View {
 		clear();
 
 		// set the bg color as white
-		this.setBackgroundColor(Color.TRANSPARENT);
+		this.setBackgroundColor(Color.WHITE);
 
 		// width and height should cover the screen
 		this.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));

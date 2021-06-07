@@ -1,6 +1,9 @@
 import React, {
-  Component, PropTypes
+  Component
 } from 'react';
+
+import PropTypes from 'prop-types';
+
 
 import ReactNative, {
   View, Text, Modal, Platform, Alert
@@ -49,7 +52,7 @@ class SignatureView extends Component {
             </View>
           </View>
           <SignatureCapture
-              style={{flex: 1, width: '100%'}}
+            style={{flex: 1, width: '100%'}}
             onDragEvent={this._onDragEvent.bind(this)}
             onSaveEvent={this._onSaveEvent.bind(this)}
           />

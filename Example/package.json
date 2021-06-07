@@ -6,8 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "react": "^15.4.1",
-    "react-native": "0.42.3",
+    "react": "^17.0.2",
+    "react-native": "^0.64.2",
     "react-native-signature-capture": "^0.4.11"
   }
 }
