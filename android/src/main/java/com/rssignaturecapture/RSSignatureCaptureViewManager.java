@@ -26,6 +26,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	public static final String PROPS_MAX_STROKE_WIDTH="maxStrokeWidth";
 	public static final String PROPS_STROKE_COLOR="strokeColor";
 	public static final String PROPS_BACKGROUND_COLOR="backgroundColor";
+	public static final String PROPS_CLEAR_SIGN_ON_ORIENTATION_CHANGE="clearSigOnOrientationChange";
 
 	public static final int COMMAND_SAVE_IMAGE = 1;
 	public static final int COMMAND_RESET_IMAGE = 2;
@@ -54,6 +55,16 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 		Log.d("setViewMode:", "" + viewMode);
 		if(view!=null){
 			view.setViewMode(viewMode);
+		}
+	}
+
+
+
+	@ReactProp(name = PROPS_CLEAR_SIGN_ON_ORIENTATION_CHANGE)
+	public void setClearSignOnOrientationChange(RSSignatureCaptureMainView view, @Nullable boolean clearSignOnOrientationChange) {
+		Log.d("setClearSignOnOrientationChange:", "" + clearSignOnOrientationChange);
+		if(view!=null){
+			view.setClearSignatureOnOrientationChange(clearSignOnOrientationChange);
 		}
 	}
 

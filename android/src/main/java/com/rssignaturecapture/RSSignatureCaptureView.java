@@ -2,9 +2,11 @@ package com.rssignaturecapture;
 
 import android.content.Context;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.MotionEvent;
@@ -53,6 +55,7 @@ public class RSSignatureCaptureView extends View {
 	private boolean dragged = false;
 	private boolean multipleTouchDragged = false;
 	private int SCROLL_THRESHOLD = 5;
+	private boolean clearSignOnOrientationChange = false;
 
 	public interface SignatureCallback {
 		void onDragged();
@@ -290,6 +293,28 @@ public class RSSignatureCaptureView extends View {
 
 		return true;
 	}
+
+
+	protected  void setClearSignOnOrientationChange(boolean clearSignOnOrientationChange){
+		this.clearSignOnOrientationChange = clearSignOnOrientationChange;
+	}
+
+	Handler handler = new Handler();
+	final Runnable runnable = new Runnable() {
+		public void run() {
+			clear();
+		}
+	};
+
+	@Override
+	protected void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		/* Clears the signature if there is any orientation change */
+		if(clearSignOnOrientationChange){
+			handler.postDelayed(runnable, 100);
+		}
+	}
+
 
 	public void sendDragEventToReact() {
 		if (callback != null && dragged) {
