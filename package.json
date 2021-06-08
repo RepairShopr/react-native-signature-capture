@@ -1,6 +1,6 @@
 {
   "name": "react-native-signature-capture",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
   "scripts": {
@@ -27,5 +27,9 @@
   "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
   "dependencies": {
     "prop-types": "^15.5.10"
+  },
+  "devDependencies": {
+    "react": "16.13.1",
+    "react-native": "0.63.2"
   }
 }

@@ -1,37 +1,23 @@
-import React, {
-  Component
-} from 'react';
-
-import PropTypes from 'prop-types';
-
-
-import ReactNative, {
-  View, Text, Modal, Platform, Alert
-} from 'react-native';
-
+import React, {Component} from 'react';
+import {View, Text, Modal, Platform} from 'react-native';
 import SignatureCapture from 'react-native-signature-capture';
 
 const toolbarHeight = Platform.select({
   android: 0,
-  ios: 22
+  ios: 22,
 });
 
 const modalViewStyle = {
   paddingTop: toolbarHeight,
-  flex: 1
+  flex: 1,
 };
 
 class SignatureView extends Component {
-
-  static propTypes = {
-    onSave: PropTypes.func
-  }
-
   constructor(props) {
     super(props);
 
     this.state = {
-      visible: false
+      visible: false,
     };
   }
 
@@ -43,7 +29,10 @@ class SignatureView extends Component {
     const {visible} = this.state;
 
     return (
-      <Modal transparent={false} visible={visible} onRequestClose={this._onRequreClose.bind(this)}>
+      <Modal
+        transparent={false}
+        visible={visible}
+        onRequestClose={this._onRequreClose.bind(this)}>
         <View style={modalViewStyle}>
           <View style={{padding: 10, flexDirection: 'row'}}>
             <Text onPress={this._onPressClose.bind(this)}>{' x '}</Text>
@@ -55,6 +44,10 @@ class SignatureView extends Component {
             style={{flex: 1, width: '100%'}}
             onDragEvent={this._onDragEvent.bind(this)}
             onSaveEvent={this._onSaveEvent.bind(this)}
+            backgroundColor="#ff00ff"
+            strokeColor="#ffffff"
+            minStrokeWidth={4}
+            maxStrokeWidth={4}
           />
         </View>
       </Modal>
@@ -71,7 +64,7 @@ class SignatureView extends Component {
 
   _onDragEvent() {
     // This callback will be called when the user enters signature
-   console.log("dragged");
+    //console.log('dragged');
   }
 
   _onSaveEvent(result) {
