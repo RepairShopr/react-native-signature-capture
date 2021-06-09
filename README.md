@@ -44,8 +44,8 @@ Add these lines in your file: android/settings.gradle
 ```
 ...
 
-include ':reactnativesignaturecapture',':app'
-project(':reactnativesignaturecapture').projectDir = new File(settingsDir, '../node_modules/react-native-signature-capture/android')
+include ':react-native-signature-capture',':app'
+project(':react-native-signature-capture').projectDir = new File(settingsDir, '../node_modules/react-native-signature-capture/android')
 ```
 
 Add line in your file: android/app/build.gradle
@@ -55,7 +55,7 @@ Add line in your file: android/app/build.gradle
 
 dependencies {
     ...
-    compile project(':reactnativesignaturecapture') // <-- add this line
+    compile project(':react-native-signature-capture') // <-- add this line
 }
 ```
 
