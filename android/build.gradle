@@ -17,6 +17,9 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
