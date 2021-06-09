@@ -74,7 +74,9 @@
 
 		[self addSubview:sign];
 
-		if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+		UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+
+		if ( deviceOrientation==UIInterfaceOrientationLandscapeRight || deviceOrientation==UIInterfaceOrientationLandscapeLeft ) {
 
 			if (_showTitleLabel) {
 				titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 24)];
