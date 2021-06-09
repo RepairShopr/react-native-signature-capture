@@ -296,7 +296,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 	
 	UIImage *signatureImg;
 	UIImage *snapshot = [self snapshot];
-	[self erase];
+// 	[self erase]; not required causing clear signature issue on submission
 	
 	if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
 		//signature
