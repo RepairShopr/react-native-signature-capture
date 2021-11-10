@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.homepage     = package["homepage"]
   s.license      = package["license"]
   s.platform     = :ios, "8.4"
-  s.source       = { :git => "https://github.com/RepairShopr/react-native-signature-capture", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/localz/react-native-signature-capture", :tag => "#{s.version}" }
   s.source_files  = "ios/*.{h,m}"
   s.dependency "React"
 end
