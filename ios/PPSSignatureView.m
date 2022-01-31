@@ -459,6 +459,9 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 		
 		previousVertex = v;
 		addVertex(&length, previousVertex);
+		// JS code triggers to save signature when onDrag event triggered
+		// Hence need to trigger Dragged Event when gesture finished
+		[self.manager publishDraggedEvent]; 
 	}
 	
 	[self setNeedsDisplay];
