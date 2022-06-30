@@ -12,21 +12,20 @@ function release() {
   git tag -a "$tag" -m "$tag"
 }
 
-# release minor
 function rminor() {
-  version=$(npm version minor --workspaces=false | cut -d'v' -f2)
+  version=$(npm version minor | cut -d'v' -f2)
   echo "bumped to $version"
   release "$version"
 }
 
 function rpatch() {
-  version=$(npm version patch --workspaces=false | cut -d'v' -f2)
+  version=$(npm version patch | cut -d'v' -f2)
   echo "bumped to $version"
   release "$version"
 }
 
 function rmajor() {
-  version=$(npm version major --workspaces=false | cut -d'v' -f2)
+  version=$(npm version major | cut -d'v' -f2)
   echo "bumped to $version"
   release "$version"
 }
