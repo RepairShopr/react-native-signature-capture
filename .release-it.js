@@ -11,10 +11,4 @@ module.exports = {
     commit: true,
     commitMessage: "chore(release): release ${version}",
   },
-  plugins: {
-    "@release-it/bumper": {
-      in: "package.json",
-      out: "src/version.json",
-    },
-  },
 };
