@@ -1,10 +1,13 @@
 {
   "name": "@localz/react-native-signature-capture",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release:patch": "scripts/release-module.sh patch && git push --follow-tags",
+    "release:minor": "scripts/release-module.sh minor && git push --follow-tags",
+    "release:major": "scripts/release-module.sh major && git push --follow-tags"
   },
   "repository": {
     "type": "git",
@@ -16,8 +19,14 @@
     "ios",
     "signature"
   ],
+  "devDependencies": {
+    "@babel/core": "7.18.6",
+    "@babel/preset-env": "7.1.6",
+    "react": "17.0.2",
+    "react-native": "0.68.2"
+  },
   "peerDependencies": {
-    "react-native": ">=0.60"
+    "react-native": "*"
   },
   "author": "RepairShopr",
   "license": "ISC",

@@ -1,7 +1,3 @@
-def safeExtGet(prop, fallback) {
-    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
-}
-
 buildscript {
     repositories {
         google()
@@ -9,35 +5,114 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:7.1.2"
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
+        classpath "com.android.tools.build:gradle:7.1.3"
     }
 }
 
 apply plugin: "com.android.library"
 
 android {
-    compileSdkVersion safeExtGet("compileSdkVersion", 30)
-    buildToolsVersion safeExtGet("buildToolsVersion", "30.0.3")
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
-        minSdkVersion safeExtGet("minSdkVersion", 21)
-        targetSdkVersion safeExtGet("targetSdkVersion", 30)
+        minSdkVersion 21
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
         }
+    }
+
+    lintOptions {
+        disable "GradleCompatible"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    google()
+    maven { url "https://maven.localz.io/" }
+
+    def found = false
+    def defaultDir = null
+    def androidSourcesName = "React Native sources"
+
+    if (rootProject.ext.has("reactNativeAndroidRoot")) {
+        defaultDir = rootProject.ext.get("reactNativeAndroidRoot")
+    } else {
+        defaultDir = new File(
+                projectDir,
+                "/../../../node_modules/react-native/android"
+        )
+    }
+
+    if (defaultDir.exists()) {
+        maven {
+            url defaultDir.toString()
+            name androidSourcesName
+        }
+
+        logger.info(":${project.name}:reactNativeAndroidRoot ${defaultDir.canonicalPath}")
+        found = true
+    } else {
+        def parentDir = rootProject.projectDir
+
+        1.upto(5, {
+            if (found) return true
+            parentDir = parentDir.parentFile
+
+            def androidSourcesDir = new File(
+                    parentDir,
+                    "node_modules/react-native"
+            )
+
+            def androidPrebuiltBinaryDir = new File(
+                    parentDir,
+                    "node_modules/react-native/android"
+            )
+
+            if (androidPrebuiltBinaryDir.exists()) {
+                maven {
+                    url androidPrebuiltBinaryDir.toString()
+                    name androidSourcesName
+                }
+
+                logger.info(":${project.name}:reactNativeAndroidRoot ${androidPrebuiltBinaryDir.canonicalPath}")
+                found = true
+            } else if (androidSourcesDir.exists()) {
+                maven {
+                    url androidSourcesDir.toString()
+                    name androidSourcesName
+                }
+
+                logger.info(":${project.name}:reactNativeAndroidRoot ${androidSourcesDir.canonicalPath}")
+                found = true
+            }
+        })
+    }
+
+    if (!found) {
+        throw new GradleException(
+                "${project.name}: unable to locate React Native android sources. " +
+                        "Ensure you have you installed React Native as a dependency in your project and try again."
+        )
     }
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.3.1"
-    implementation "com.facebook.react:react-native:+"
+    implementation "androidx.appcompat:appcompat:1.4.2"
+
+    // noinspection GradleDynamicVersion
+    api "com.facebook.react:react-native:+"
 }
