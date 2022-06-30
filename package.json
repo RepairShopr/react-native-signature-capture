@@ -5,9 +5,7 @@
   "main": "SignatureCapture.js",
   "scripts": {
     "test": "echo \"No tests\" && exit 0",
-    "release:patch": "scripts/release-module.sh patch && git push --follow-tags",
-    "release:minor": "scripts/release-module.sh minor && git push --follow-tags",
-    "release:major": "scripts/release-module.sh major && git push --follow-tags"
+    "release": "yarn test && release-it --no-github"
   },
   "repository": {
     "type": "git",
@@ -23,7 +21,9 @@
     "@babel/core": "7.18.6",
     "@babel/preset-env": "7.1.6",
     "react": "17.0.2",
-    "react-native": "0.68.2"
+    "react-native": "0.68.2",
+    "release-it": "14.12.4",
+    "@release-it/bumper": "3.0.1"
   },
   "peerDependencies": {
     "react-native": "*"
