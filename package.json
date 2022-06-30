@@ -4,7 +4,7 @@
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"No tests\" && exit 0",
     "release:patch": "scripts/release-module.sh patch && git push --follow-tags",
     "release:minor": "scripts/release-module.sh minor && git push --follow-tags",
     "release:major": "scripts/release-module.sh major && git push --follow-tags"
