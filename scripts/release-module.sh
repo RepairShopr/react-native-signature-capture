@@ -6,7 +6,7 @@ function release() {
   version=$1
   git add .
   package=${PWD##*/}
-  tag="$package@$version"
+  tag="v$version"
   echo "using tag: $tag"
   git commit -m "$tag"
   git tag -a "$tag" -m "$tag"
