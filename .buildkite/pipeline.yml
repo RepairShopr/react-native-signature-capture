@@ -27,7 +27,6 @@ steps:
     if: build.tag != null
     commands:
       - npm config set "//registry.npmjs.org/:_authToken" $${NPM_TOKEN}
-      - rm -rf lib
       - yarn --frozen-lockfile
       - npm publish
     plugins:
