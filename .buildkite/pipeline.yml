@@ -2,27 +2,6 @@ env:
   NODE_VERSION: "16"
 
 steps:
-  - label: ":yarn: Run install and tests"
-    command:
-      - npm config set "//registry.npmjs.org/:_authToken" $${NPM_TOKEN}
-      - npm config set registry https://registry.npmjs.org/
-      - yarn --frozen-lockfile
-      - yarn test
-    timeout_in_minutes: 20
-    plugins:
-      - docker-login#v2.1.0:
-          username: localzservice
-          password-env: DOCKER_LOGIN_PASSWORD
-      - docker#v3.13.0:
-          image: localz/buildkite-node:${NODE_VERSION}
-          mount-ssh-agent: true
-          environment:
-            - CI
-            - NPM_TOKEN
-            - BUILDKITE_BRANCH
-            - BUILDKITE_PULL_REQUEST_BASE_BRANCH
-  - wait
-
   - label: ":cloud: Publish"
     if: build.tag != null
     commands:

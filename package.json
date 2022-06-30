@@ -1,11 +1,15 @@
 {
   "name": "@localz/react-native-signature-capture",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Lets users sign their signatures",
   "main": "SignatureCapture.js",
+  "files": [
+    "android",
+    "Example",
+    "ios"
+  ],
   "scripts": {
-    "test": "echo \"No tests\" && exit 0",
-    "release": "yarn test && release-it --no-github"
+    "release": "release-it"
   },
   "repository": {
     "type": "git",
