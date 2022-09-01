@@ -6,6 +6,7 @@
 @interface PPSSignatureView : GLKView
 
 @property (assign, nonatomic) UIColor *strokeColor;
+@property (assign, nonatomic) UIColor *backgroundColor;
 @property (assign, nonatomic) BOOL hasSignature;
 @property (strong, nonatomic) UIImage *signatureImage;
 @property (nonatomic, strong) RSSignatureViewManager *manager;
