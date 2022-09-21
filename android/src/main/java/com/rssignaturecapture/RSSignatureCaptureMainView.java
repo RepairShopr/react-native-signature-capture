@@ -1,5 +1,6 @@
 package com.rssignaturecapture;
 
+import android.graphics.Matrix;
 import android.util.Log;
 import android.view.ViewGroup;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -199,7 +200,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
     }
     Bitmap resizedBitmap = Bitmap.createScaledBitmap(image, width, height, true);
 
-    if (rotateClockwise){
+    if (this.signatureView.getRotateClockwise()){
       Matrix matrix = new Matrix();
       // 正数顺时针,负数逆时针
       matrix.postRotate(-90);
@@ -207,7 +208,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
       return rotatedBitmap;
     }else{
       return resizedBitmap;
-    }    
+    }
   }
 
 
