@@ -197,8 +197,17 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
       height = maxSize;
       width = (int) (height * bitmapRatio);
     }
+    Bitmap resizedBitmap = Bitmap.createScaledBitmap(image, width, height, true);
 
-    return Bitmap.createScaledBitmap(image, width, height, true);
+    if (rotateClockwise){
+      Matrix matrix = new Matrix();
+      // 正数顺时针,负数逆时针
+      matrix.postRotate(-90);
+      Bitmap rotatedBitmap = Bitmap.createBitmap(resizedBitmap, 0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight(), matrix, true);
+      return rotatedBitmap;
+    }else{
+      return resizedBitmap;
+    }    
   }
 
 
