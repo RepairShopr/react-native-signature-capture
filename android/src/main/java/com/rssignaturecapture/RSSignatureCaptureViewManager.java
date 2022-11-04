@@ -26,6 +26,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	public static final String PROPS_MAX_STROKE_WIDTH="maxStrokeWidth";
 	public static final String PROPS_STROKE_COLOR="strokeColor";
 	public static final String PROPS_BACKGROUND_COLOR="backgroundColor";
+	public static final String PROPS_ROTATE_CLOCK_WISE = "rotateClockwise";
 
 	public static final int COMMAND_SAVE_IMAGE = 1;
 	public static final int COMMAND_RESET_IMAGE = 2;
@@ -111,6 +112,14 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 		Log.d("backgroundColor:",  ""+color);
 		if(view!=null){
 			view.getSignatureView().setBackgroundColor(parsed);
+		}
+	}
+
+	@ReactProp(name = PROPS_ROTATE_CLOCK_WISE)
+	public void setRotateClockWise(RSSignatureCaptureMainView view, @Nullable boolean rotateClockwise){
+		Log.d("setRotateClockWise:", ""+rotateClockwise);
+		if (view != null){
+			view.getSignatureView().setRotateClockWise(rotateClockwise);
 		}
 	}
 

@@ -53,6 +53,7 @@ public class RSSignatureCaptureView extends View {
 	private boolean dragged = false;
 	private boolean multipleTouchDragged = false;
 	private int SCROLL_THRESHOLD = 5;
+	private boolean rotateClockwise = false;
 
 	public interface SignatureCallback {
 		void onDragged();
@@ -213,6 +214,16 @@ public class RSSignatureCaptureView extends View {
 	private float strokeWidth(float velocity) {
 		return Math.max(mMaxWidth / (velocity + 1), mMinWidth);
 	}
+
+	public void setRotateClockWise(boolean newRotateClockwise){
+		 rotateClockwise = newRotateClockwise;
+	}
+
+  public boolean getRotateClockwise(){
+    return  rotateClockwise;
+  }
+
+
 
 	private ControlTimedPoints calculateCurveControlPoints(TimedPoint s1, TimedPoint s2, TimedPoint s3) {
 		float dx1 = s1.x - s2.x;

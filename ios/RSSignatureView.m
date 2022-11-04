@@ -187,10 +187,16 @@
 
 - (void)setBackgroundColor:(UIColor*)backgroundColor {
 	_backgroundColor = backgroundColor;
+	if (sign){
+		sign.backgroundColor = backgroundColor;
+	}
 }
 
 - (void)setStrokeColor:(UIColor*)strokeColor {
 	_strokeColor = strokeColor;
+	if (sign){
+		sign.strokeColor = strokeColor;
+	}
 }
 
 -(void) onSaveButtonPressed {
