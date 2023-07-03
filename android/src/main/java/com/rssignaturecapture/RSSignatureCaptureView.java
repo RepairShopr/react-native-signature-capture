@@ -97,7 +97,7 @@ public class RSSignatureCaptureView extends View {
 
 		// set the signature bitmap
 		if (signatureBitmap == null) {
-			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.RGB_565);
+			signatureBitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
 		}
 
 		// important for saving signature
