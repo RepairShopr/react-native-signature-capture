@@ -1,7 +1,8 @@
-# react-native-signature-capture
+# rjc-react-native-signature-capture
 
 ## About this
 React Native library for capturing signature
+This repository was forked from RepairShopr/react-native-signature-capture which appears to no longer be updated. This forked branch was created to extend the life of this library past APG 7 which required a namespace in the build.gradle file for Android devices. Below README is still for the original react-native-signature-capture repository.
 
 User would sign on the app and when you press the save button it returns the base64 encoded png
 
